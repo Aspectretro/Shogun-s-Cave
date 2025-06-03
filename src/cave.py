@@ -26,4 +26,18 @@ class Cave:
     def get_name(self):
         return self.name
 
-    # TODO: multi-character and item handling
+    # Item handling
+    def get_items(self):
+        return self.items
+    
+    def add_item(self, new_item):
+        self.items.add(new_item)
+
+    def remove_item(self, item):
+        self.items.remove(item)
+
+    def clear_items(self):
+        """Remove all items from this cave"""
+        self.items.clear()
+
+    # TODO: multi-character handling
