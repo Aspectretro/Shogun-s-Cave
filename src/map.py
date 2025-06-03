@@ -24,7 +24,11 @@ class Map:
         # Set starting cave
         self.starting_cave = cave1
 
-    def linked_caves(self, cave):
+    def linked_caves(self, dir):
         """Return a list of linked caves to the one provided"""
-        for caves in cave:
-            pass # TODO: iterate over caves, check for backlinks 
+        link = self.map[dir]
+
+    def move(self, dir):
+        for dir in self.linked_caves():
+            cave = self.linked_caves[dir]
+            print(f'The') # TODO: iterate over caves, check for backlinks
