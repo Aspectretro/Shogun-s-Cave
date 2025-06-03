@@ -5,6 +5,7 @@ class Map:
     """
     
     def __init__(self):
+        self.starting_cave = None
         self.map = {}
 
     def generate(self):
@@ -19,3 +20,11 @@ class Map:
             cave2: cave3,
             cave3: cave1
         }
+
+        # Set starting cave
+        self.starting_cave = cave1
+
+    def linked_caves(self, cave):
+        """Return a list of linked caves to the one provided"""
+        for caves in cave:
+            pass # TODO: iterate over caves, check for backlinks 

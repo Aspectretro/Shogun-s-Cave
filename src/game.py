@@ -16,7 +16,19 @@ class Game:
         self.map = Map()
         self.map.generate()
 
+        self.current_cave = self.map.starting_cave # initially the player begins in the starting cave
+
     def start(self):
         """Entrypoint for the game. Starts the game loop"""
+
+        # Main game loop
         while self.alive:
-            pass
+            # print status details
+            print("\n")
+            print(f"[{self.current_cave.num}]: {self.current_cave.name}")
+            print("---*---*---")
+            print(f"{self.current_cave.description}")
+            print(f"")
+            print("---*---*---")
+            
+            command = input("> ").lower()
