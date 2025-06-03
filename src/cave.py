@@ -1,9 +1,10 @@
 class Cave:
-    """Represents a single room in the game the player may enter.
+    """Represents a single room in the game the player may enter. Must have a unique number assigned to it
 
     May be composed of Characters and Items
     """
-    def __init__(self, name, description):
+    def __init__(self, num, name, description):
+        self.num = num
         self.name = name
         self.description = description
 
