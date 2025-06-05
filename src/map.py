@@ -12,13 +12,13 @@ class Map:
         """Fill in the map with new caves, overwriting the current map"""
         # TODO: names and descriptions
         cave1 = Cave(1, "Cave", "A small cave underground. No light seeps through although there are cracks in the ceiling")
-        cave2 = Cave(2, "Shop", "A nice and cozy room with a counter, some products, and a sexy lady.")
+        cave2 = Cave(2, "Shop", "A nice and cozy room with a counter, some products.")
         cave3 = Cave(3, "Pit", "Deep, dark, bottomless, hole. Take care with your footing")
         cave4 = Cave(4, "Dungeon", "Echoes of unseen horrors lurking beyond the flickering torchlight.")
         cave5 = Cave(5, "Dungeon", "A large room with some equipments and some metallic racks")
         cave6 = Cave(6, "Lava Tube", "Just a long tunnel with a sense of cold and dreadfulness")
         cave7 = Cave(7, "Grotto", "A cathedral of stone where time pools in the hush of dripping stalactites.")
-        cave8 = Cave(8, "Shop", "A nice and cozy room with a counter, some products, and a sexy lady.")
+        cave8 = Cave(8, "Shop", "A nice and cozy room with a counter, some products.")
         cave9 = Cave(9, "Pit", "Deep, dark, bottomless, hole. Take care with your footing")
         cave10 = Cave(10, "Cave", "A small cave underground. A glimpse of light and some gentle gusts of air seeps through the gaps between the rocks.")
         cave11 = Cave(11, "Room", "An enormous space with a throne like chair in the middle.")
