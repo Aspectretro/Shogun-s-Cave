@@ -42,9 +42,9 @@ class Map:
         # Set starting cave
         self.starting_cave = cave1
 
-    def linked_caves(self, dir):
+    def linked_caves(self, cave):
         """Return a list of linked caves to the one provided"""
-        link = self.map[dir]
+        return self.map[cave]
 
     def move(self, dir):
         for dir in self.linked_caves():
