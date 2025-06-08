@@ -24,6 +24,13 @@ class Game:
 
         print("\n")
         print("Welcome to [game name]! This is the tutorial and will show you how the game works.")
+        print("In this game, you will be dropped into a series of unknown caverns, and your goal is to survive and find a way out.")
+        print("Throughout your adventure inside this deep, dark world, you will encounter monsters, and potential friendlies.")
+        print("Here is a list of commands you can use when you are within the game:")
+        print("[command1]")
+        print("[command2]")
+        print("[command3]")
+        print("[command4]") # TODO: add command name and methods
         print("If you are already familiar with the game, enter q to skip.")
         print("\n")
 
