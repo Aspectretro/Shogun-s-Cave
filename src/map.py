@@ -26,7 +26,7 @@ class Map:
 
     def linked_caves(self, dir):
         """Return a list of linked caves to the one provided"""
-        link = self.map[dir]
+        self.link = self.map[dir]
 
     def move(self, dir):
         for dir in self.linked_caves():
