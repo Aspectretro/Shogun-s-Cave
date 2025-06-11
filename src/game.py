@@ -1,8 +1,6 @@
 from map import Map
 from item import Item
 from cave import Cave
-from character import Enemy
-from character import Friendly
 import random as r
 
 class Game:
@@ -64,7 +62,19 @@ class Game:
                     continue
             except:
                 pass # do nothing
-
             # handle other commands
-            if command.startswith(""):
-                pass # TODO: handle other commands
+            if command == "fight":
+                """When encountering a ninja, instead of fighting, you get teleported to a random location"""
+                if inhabitance is not None:
+                    if inhabitance == ninja():
+                        pass
+
+            if command == "pat":
+                pass
+
+            if command == "help": # TODO: display tutorial page
+                print("Here is a list of commands available:")
+                print("Move: type in a number of the linked caves to move.")
+                print("Fight: fight the appeared character/enemy with an item that you possess.")
+                print("Pat: pat the appeared character/enemy")
+                print("Shop: open up the item purchase menu when in a shop")
