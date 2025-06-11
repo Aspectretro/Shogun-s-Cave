@@ -36,6 +36,17 @@ class Game:
         print("This arrow below indicates the game is listening for a command.")
         command = input("> ").lower()
 
+        # setters
+    def set_cave(self, cave):
+        """Set the current cave the player is in.
+
+        Does nothing if the player is no longer alive
+        """
+        if not self.alive:
+            return
+        
+        self.current_cave = cave
+
     def start(self):
         """Entrypoint for the game. Starts the game loop"""
 
@@ -66,12 +77,17 @@ class Game:
             if command.startswith(""):
                 pass # TODO: handle other commands
 
-            
+            inhabitance = self.current_cave.get_characters()
             if command == "fight":
                 """When encountering a ninja, instead of fighting, you get teleported to a random location"""
-                if inhabitance is not None:
-                    if inhabitance == ninja():
-                        pass
+                if bool(inhabitance) == True:
+                    print("Who would you want to fight?")
+                    n = 1
+                    for items in inhabitance:
+                        print(f"{n}. {items}")
+                        n += 1
+                else:
+                    print("There are no one here to fight with.")
 
             if command == "pat":
                 pass
@@ -82,13 +98,3 @@ class Game:
                 print("Fight: fight the appeared character/enemy with an item that you possess.")
                 print("Pat: pat the appeared character/enemy")
                 print("Shop: open up the item purchase menu when in a shop")
-    # setters
-    def set_cave(self, cave):
-        """Set the current cave the player is in.
-
-        Does nothing if the player is no longer alive
-        """
-        if not self.alive:
-            return
-        
-        self.current_cave = cave
