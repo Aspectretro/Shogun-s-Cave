@@ -1,7 +1,8 @@
 from map import Map
 from item import Item
 from cave import Cave
-from character import Character
+from character import Enemy
+from character import Friendly
 import random as r
 
 class Game:
