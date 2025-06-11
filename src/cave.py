@@ -3,10 +3,11 @@ class Cave:
 
     May be composed of Characters and Items
     """
-    def __init__(self, num, name, description):
+    def __init__(self, num, name, description, map):
         self.num = num
         self.name = name
         self.description = description
+        self.map = map
 
         # Optional attributes
         self.characters = set() # set to ensure a character cannot appear twice in a room
@@ -41,4 +42,9 @@ class Cave:
         """Remove all items from this cave"""
         self.items.clear()
 
-    # TODO: multi-character handling
+    # character handling
+    def add_character(self, new_character):
+        self.characters.add(new_character)
+
+    def remove_character(self, character):
+        self.characters.remove(character)

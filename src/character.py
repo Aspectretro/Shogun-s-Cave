@@ -2,9 +2,10 @@ class Character:
     """Represents a non-player character with an optional voice line
     """
 
-    def __init__(self, name, description):
+    def __init__(self, name, description, cave):
         self.name = name
         self.description = description
+        self.cave = cave
 
         # Optional attributes
         self.conversation = None
@@ -38,8 +39,8 @@ class Enemy(Character):
     """Represents a character that acts as an enemy to the player
     """
 
-    def __init__(self, name, description):
-        super().__init__(name, description)  # initialise superclass
+    def __init__(self, name, description, cave):
+        super().__init__(name, description, cave)  # initialise superclass
 
         # Optional attributes
         self.weakness = None
@@ -54,6 +55,21 @@ class Enemy(Character):
 
     def fight(self, item):
         pass # TODO: Stub implementation
+
+class Ninja(Enemy):
+    """A special type of enemy that can kidnap the player and transport them to a random cave"""
+
+    def __init__(self, cave):
+        super().__init__("Ninja", "A black shadowy figure that looks ready to strike", cave)
+
+    def fight(self, item):
+        """If a player chooses to fight with a ninja they will kidnap them"""
+        # kidnapping procedure
+        print(f"You try to fight the ninja with your {item.name}, but they quickly drop a smoke bomb!")
+        random_cave = self.cave.map.rand_cave()
+        # send player to random cave
+        self.cave.map.game.set_cave(random_cave)
+        print(f"The smoke clears and suddenly you're in a different cave...")
 
 
 class Friendly(Character):

@@ -12,7 +12,7 @@ class Game:
         self.alive = True
 
         # Generate map
-        self.map = Map()
+        self.map = Map(self)
         self.map.generate()
 
         self.current_cave = self.map.starting_cave # initially the player begins in the starting cave
@@ -63,6 +63,10 @@ class Game:
             except:
                 pass # do nothing
             # handle other commands
+            if command.startswith(""):
+                pass # TODO: handle other commands
+
+            
             if command == "fight":
                 """When encountering a ninja, instead of fighting, you get teleported to a random location"""
                 if inhabitance is not None:
@@ -78,3 +82,13 @@ class Game:
                 print("Fight: fight the appeared character/enemy with an item that you possess.")
                 print("Pat: pat the appeared character/enemy")
                 print("Shop: open up the item purchase menu when in a shop")
+    # setters
+    def set_cave(self, cave):
+        """Set the current cave the player is in.
+
+        Does nothing if the player is no longer alive
+        """
+        if not self.alive:
+            return
+        
+        self.current_cave = cave
