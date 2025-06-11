@@ -48,3 +48,6 @@ class Cave:
 
     def remove_character(self, character):
         self.characters.remove(character)
+
+    def get_characters(self):
+        return self.characters
