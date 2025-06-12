@@ -86,6 +86,14 @@ class Game:
                     for items in inhabitance:
                         print(f"{n}. {items}")
                         n += 1
+                    fight_with = input("> ")
+                    try:
+                        # begin fight if the character chosen is within the set
+                        if fight_with in inhabitance:
+                            pass
+                    except:
+                        pass
+
                 else:
                     print("There are no one here to fight with.")
 
