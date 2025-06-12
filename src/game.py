@@ -1,6 +1,8 @@
 from map import Map
 from item import Item
 from cave import Cave
+from character import Enemy
+from character import Friendly
 import random as r
 
 class Game:
@@ -82,15 +84,22 @@ class Game:
                 """When encountering a ninja, instead of fighting, you get teleported to a random location"""
                 if bool(inhabitance) == True:
                     print("Who would you want to fight?")
-                    n = 1
                     for items in inhabitance:
-                        print(f"{n}. {items}")
-                        n += 1
+                        print(items)
                     fight_with = input("> ")
                     try:
                         # begin fight if the character chosen is within the set
                         if fight_with in inhabitance:
-                            pass
+                            if isinstance(fight_with, Enemy): # TODO: method of detecting the correct class of fight_with
+                                print(f"What item will you use to defend yourself from {fight_with}")
+                                fight_item = input("> ")
+                                if fight_item == inhabitance.weakness():
+                                    print("Sucess")
+                                else:
+                                    print("You died")
+                                    self.alive = False # you are dead, break the loop
+                            elif isinstance(fight_with, Friendly):
+                                pass
                     except:
                         pass
 
