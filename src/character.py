@@ -66,7 +66,7 @@ class Ninja(Enemy):
         """If a player chooses to fight with a ninja they will kidnap them"""
         # kidnapping procedure
         print(f"You try to fight the ninja with your {item.name}, but they quickly drop a smoke bomb!")
-        random_cave = self.cave.map.rand_cave()
+        random_cave = self.cave.map.random_cave()
         # send player to random cave
         self.cave.map.game.set_cave(random_cave)
         print(f"The smoke clears and suddenly you're in a different cave...")
