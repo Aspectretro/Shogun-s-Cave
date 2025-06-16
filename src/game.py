@@ -1,6 +1,5 @@
 from map import Map
 from item import Item
-from cave import Cave
 from character import Enemy
 from character import Friendly
 import random as r
@@ -73,13 +72,18 @@ class Game:
                 if cmd_cave_num not in map(lambda cave: cave.num, linked_caves):
                     print("You cannot go that way!")
                     continue
+                else:
+                    moving = self.set_cave(command) # FIXME: fix movememnt command with map
+                    self.move(moving)
             except:
                 pass # do nothing
             # handle other commands
             if command.startswith(""):
                 pass # TODO: handle other commands
 
-            inhabitance = self.current_cave.get_characters()
+            location = self.current_cave
+            inhabitance = location.get_characters()
+            print(inhabitance)
             if command == "fight":
                 """When encountering a ninja, instead of fighting, you get teleported to a random location"""
                 if bool(inhabitance) == True:
@@ -99,7 +103,7 @@ class Game:
                                     print("You died")
                                     self.alive = False # you are dead, break the loop
                             elif isinstance(fight_with, Friendly):
-                                pass
+                                print("I wouldn't recommend doing this to a friend...")
                     except:
                         pass
 
@@ -107,7 +111,21 @@ class Game:
                     print("There are no one here to fight with.")
 
             if command == "pat":
-                pass
+                if bool(inhabitance) == True:
+                    print("Who will you pat?")
+                    for items in inhabitance:
+                        print(items)
+                    pat_char = input("> ")
+                    try:
+                        if pat_char in inhabitance:
+                            if isinstance(pat_char, Friendly):
+                                print(f'You have patted {pat_char}')
+                        elif isinstance(pat_char, Enemy):
+                            print("Ain't no way you are thinking of doing that...")
+                        else:
+                            print(f'{pat_char} is not here with you')
+                    except:
+                        pass
 
             if command == "help": # TODO: display tutorial page
                 print("Here is a list of commands available:")
