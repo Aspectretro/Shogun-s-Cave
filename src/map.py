@@ -10,6 +10,7 @@ class Map:
         self.starting_cave = None
         self.map = {}
         self.game = game
+        self.character = None
 
     def generate(self):
         """Fill in the map with new caves, overwriting the current map"""
@@ -29,6 +30,8 @@ class Map:
 
         ninja = Ninja(cave4)
         cave4.add_character(ninja)
+
+        # TODO: change map to graph
 
         self.map = {
             cave1: [cave2, cave3, cave4, cave5],
