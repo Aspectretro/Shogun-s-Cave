@@ -2,6 +2,7 @@ from game import Game
 
 
 def main():
+    # TODO: title screen
     game = Game()
     game.start()
 

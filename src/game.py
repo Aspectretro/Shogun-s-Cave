@@ -13,6 +13,7 @@ class Game:
 
     def __init__(self):
         self.alive = True
+        self.items = set() # the player's items - they may only have one of each item at this stage
 
         # Generate map
         self.map = MapGraph.generate(self)
@@ -58,16 +59,28 @@ class Game:
         # Main game loop
         while self.alive:
             # print status details
+            characters = self.current_cave.get_characters()
             linked_caves = self.map.linked_caves(self.current_cave)
             # get numbers of each cave linked to this one
             linked_caves_str = ", ".join(
                 map(lambda cave: f"[{cave.num}]", linked_caves))
+
+            # status message
             print("\n")
-            print(f"[{self.current_cave.num}]: {self.current_cave.name}")
             print("---*---*---")
+            print(f"[{self.current_cave.num}]: {self.current_cave.name}")
+            print("-----------")
             print(f"{self.current_cave.description}")
             print(f"This cave is linked to caves {linked_caves_str}")
+            print("-----------")
+            if len(characters) > 0:
+                print(f"You aren't alone in here! You see:")
+                for character in characters:
+                    print(f"  A {character.name}: {character.description}")
+            else:
+                print(f"It seems like there is no one else here")
             print("---*---*---")
+            # end status message
 
             command = input("> ").lower()
 
@@ -84,36 +97,46 @@ class Game:
                 self.set_cave(cmd_cave_num)
             except:
                 pass  # do nothing
+            
             # handle other commands
-            if command.startswith(""):
-                pass  # TODO: handle other commands
-
-            location = self.current_cave
-            inhabitance = location.get_characters()
-            # TODO: Print characters in the cave
             if command == "fight":
-                """When encountering a ninja, instead of fighting, you get teleported to a random location"""
-                if bool(inhabitance) == True:
-                    print("Who would you want to fight?")
-                    for items in inhabitance:
-                        print(items)
-                    fight_with = input("> ")
+                if len(self.items) <= 0:
+                    print("You don't have any items to fight with...")
+                    continue;
+                if len(characters) > 0:
+                    print(
+                        "Who do you want to fight? Input the number in brackets next to the character you would like to battle with.")
+                    for (i, character) in enumerate(characters):
+                        # print index + 1 next to characters
+                        # stating a number will be how the user selects which character to fight
+                        print(f"[{i + 1}]: {character.name}")
+
                     try:
-                        # begin fight if the character chosen is within the set
-                        if fight_with in inhabitance:
-                            # TODO: method of detecting the correct class of fight_with
-                            if isinstance(fight_with, Enemy):
-                                print(
-                                    f"What item will you use to defend yourself from {fight_with}")
-                                fight_item = input("> ")
-                                if fight_item == inhabitance.weakness():
-                                    print("Sucess")
-                                else:
-                                    print("You died")
-                                    self.alive = False  # you are dead, break the loop
-                            elif isinstance(fight_with, Friendly):
-                                print(
-                                    "I wouldn't recommend doing this to a friend...")
+                        fight_with_num = int(input("> "))
+
+                        if fight_with_num > len(character) or fight_with_num <= 0:
+                            print("That isn't a valid character in this cave!")
+                            continue;
+                        
+                        selected_character = character[fight_with_num - 1] # subtract 1 to balance out i + 1 earlier
+
+                        # do not permit players to fight Friendly characters
+                        if isinstance(selected_character, Friendly):
+                            print(f"{selected_character} is a friend, not a foe! You can't fight them!")
+
+                        # ask player for an item to fight with
+                        print("Please select one item you want to use in battle. Input the number in brackets next to the item you would like to use.")
+                        for (i, item) in enumerate(self.items):
+                            # print index + 1 next to player's items
+                            print(f"[{i + 1}]: {item.name}")
+                        fight_item_num = int(input("> "))
+                        if fight_item_num > len(self.items) or fight_item_num <= 0:
+                            print("That isn't an item you have!")
+                            continue;
+                        
+                        selected_character.fight(self.items[fight_item_num - 1])
+                    except ValueError:
+                        print("That isn't a valid number!")
                     except:
                         pass
 
@@ -121,7 +144,7 @@ class Game:
                     print("There are no one here to fight with.")
 
             if command == "pat":
-                if bool(inhabitance) == True:
+                if len(characters) > 0:
                     print("Who will you pat?")
                     for items in inhabitance:
                         print(items)
