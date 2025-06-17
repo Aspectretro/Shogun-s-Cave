@@ -20,8 +20,10 @@ class Game:
         # initially the player begins in the starting cave
         self.current_cave = self.map.get_cave(1)
 
+        # Beginning currency
+        self.purse = 10 # TODO: shopping system impl. Gain currency on enemy death. Boss gives 50-63, smaller enemies give 5-15
+
     def tutorial(self):
-        # TODO: tutorial
         """Start the tutorial for the game. Does not begin the main game loop"""
 
         print("\n")
@@ -33,7 +35,6 @@ class Game:
         print("Move: type in a number of the linked caves to move.")
         print("Fight: fight the appeared character/enemy with an item that you possess.")
         print("Pat: pat the appeared character/enemy")
-        # TODO: create corresponding commands
         print("Shop: open up the item purchase menu when in a shop")
         print("If you are already familiar with the game, enter q to skip.")
         print("\n")
