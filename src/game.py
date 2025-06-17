@@ -147,7 +147,7 @@ class Game:
             if command == "pat":
                 if len(characters) > 0:
                     print("Who will you pat?")
-                    for items in inhabitance:
+                    for items in inhabitance: # TODO: change the variable that handles the list of characters within the instance.
                         print(items)
                     pat_char = input("> ")
                     try:
