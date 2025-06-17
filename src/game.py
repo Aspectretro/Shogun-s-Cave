@@ -24,6 +24,9 @@ class Game:
         # Beginning currency
         self.purse = 10 # TODO: shopping system impl. Gain currency on enemy death. Boss gives 50-63, smaller enemies give 5-15
 
+        # Whether the status message needs to be printed again
+        self.status_dirty = True
+
     def tutorial(self):
         """Start the tutorial for the game. Does not begin the main game loop"""
 
@@ -44,15 +47,20 @@ class Game:
         command = input("> ").lower()
 
         # setters
-    def set_cave(self, cave):
-        """Set the current cave the player is in.
+    def set_cave(self, cave_num):
+        """Set the current cave the player is in by number.
 
         Does nothing if the player is no longer alive
         """
         if not self.alive:
             return
 
-        self.current_cave = self.map.get_cave(cave)
+        if cave_num == self.current_cave.num:
+            return # do not change caves if they are the same cave
+
+        self.current_cave = self.map.get_cave(cave_num)
+        # set dirty
+        self.status_dirty = True
 
     def start(self):
         """Entrypoint for the game. Starts the game loop"""
@@ -66,28 +74,36 @@ class Game:
             linked_caves_str = ", ".join(
                 map(lambda cave: f"[{cave.num}]", linked_caves))
 
-            # status message
-            print("\n")
-            print("---*---*---")
-            print(f"[{self.current_cave.num}]: {self.current_cave.name}")
-            print("-----------")
-            print(f"{self.current_cave.description}")
-            print(f"This cave is linked to caves {linked_caves_str}")
-            print("-----------")
-            if len(characters) > 0:
-                print(f"You aren't alone in here! You see:")
-                for character in characters:
-                    print(f"  A {character.name}: {character.description}")
-            else:
-                print(f"It seems like there is no one else here")
-            print("---*---*---")
-            # end status message
+            # status message, print if dirty
+            if self.status_dirty:
+                print("\033[H\033[J", end="") # magic numbers: ANSI "clear screen" characters
+                print("---*---*---")
+                print(f"[{self.current_cave.num}]: {self.current_cave.name}")
+                print("-----------")
+                print(f"{self.current_cave.description}")
+                print(f"This cave is linked to caves {linked_caves_str}")
+                print("-----------")
+                if len(characters) > 0:
+                    print(f"You aren't alone in here! You see:")
+                    for character in characters:
+                        print(f"  A {character.name}: {character.description}")
+                else:
+                    print(f"It seems like there is no one else here")
+                print("---*---*---")
+                # end status message
+                # set status to clean (dirty = False) once printed
+                self.status_dirty = False
 
+            # get command from user regardless of status dirty
             command = input("> ").lower()
 
             try:
                 # move to cave if cave number is inputted
                 cmd_cave_num = int(command)
+
+                if cmd_cave_num == self.current_cave.num:
+                    print("You're already at that cave!")
+                    continue;
 
                 # check if the cave is valid
                 if not self.map.check_link(self.current_cave.num, cmd_cave_num):
