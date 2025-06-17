@@ -56,6 +56,19 @@ class Enemy(Character):
     def fight(self, item):
         pass # TODO: Stub implementation
 
+class Boss(Enemy):
+    """Final enemy of the game. After killing it, player is allowed to exit or continue to travel wihtin the caves"""
+    def __init__(self, name, description, cave):
+        super().__init__(name, description, cave)
+    
+    def set_weakness(self, weakness):
+        return super().set_weakness(weakness)
+    
+    def get_weakness(self):
+        return super().get_weakness()
+    
+    def fight(self, item):
+        pass
 class Ninja(Enemy):
     """A special type of enemy that can kidnap the player and transport them to a random cave"""
 
