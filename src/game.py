@@ -6,14 +6,14 @@ import random as r
 
 
 class Game:
-    """Class that manages all aspects of a currently running session, including the player 
+    """Class that manages all aspects of a currently running session, including the player
 
     All other classes are managed by an instance of this class
     """
 
     def __init__(self):
         self.alive = True
-        self.items = set() # the player's items - they may only have one of each item at this stage
+        self.items = set()  # the player's items - they may only have one of each item at this stage
 
         # Generate map
         self.map = MapGraph.generate(self)
@@ -22,7 +22,7 @@ class Game:
         self.current_cave = self.map.get_cave(1)
 
         # Beginning currency
-        self.purse = 10 # TODO: shopping system impl. Gain currency on enemy death. Boss gives 50-63, smaller enemies give 5-15
+        self.purse = 10  # TODO: shopping system impl. Gain currency on enemy death. Boss gives 50-63, smaller enemies give 5-15
 
         # Whether the status message needs to be printed again
         self.status_dirty = True
@@ -57,7 +57,7 @@ class Game:
             return
 
         if cave_num == self.current_cave.num:
-            return # do not change caves if they are the same cave
+            return  # do not change caves if they are the same cave
 
         self.current_cave = self.map.get_cave(cave_num)
         # set dirty
@@ -77,7 +77,8 @@ class Game:
 
             # status message, print if dirty
             if self.status_dirty:
-                print("\033[H\033[J", end="") # magic numbers: ANSI "clear screen" characters
+                # magic numbers: ANSI "clear screen" characters
+                print("\033[H\033[J", end="")
                 print("---*---*---")
                 print(f"[{self.current_cave.num}]: {self.current_cave.name}")
                 print("-----------")
@@ -104,7 +105,7 @@ class Game:
 
                 if cmd_cave_num == self.current_cave.num:
                     print("You're already at that cave!")
-                    continue;
+                    continue
 
                 # check if the cave is valid
                 if not self.map.check_link(self.current_cave.num, cmd_cave_num):
@@ -115,76 +116,89 @@ class Game:
                 self.set_cave(cmd_cave_num)
             except:
                 pass  # do nothing
-            
+
             # handle other commands
-            if command == "refresh":
-                # refresh screen next loop iteration
-                self.status_dirty = True
-            if command == "fight":
-                if len(self.items) <= 0:
-                    print("You don't have any items to fight with...")
-                    continue;
-                if len(characters) > 0:
-                    print(
-                        "Who do you want to fight? Input the number in brackets next to the character you would like to battle with.")
-                    for (i, character) in enumerate(characters):
-                        # print index + 1 next to characters
-                        # stating a number will be how the user selects which character to fight
-                        print(f"[{i + 1}]: {character.name}")
+            match command:
+                case "refresh":
+                    self.status_dirty = True
+                case "fight":
+                    if len(self.items) <= 0:
+                        print("You don't have any items to fight with...")
+                        continue
 
-                    try:
-                        fight_with_num = int(input("> "))
+                    if len(characters) > 0:
+                        print(
+                            "Who do you want to fight? Input the number in brackets next to the character you would like to battle with.")
+                        for (i, character) in enumerate(characters):
+                            # print index + 1 next to characters
+                            # stating a number will be how the user selects which character to fight
+                            print(f"[{i + 1}]: {character.name}")
 
-                        if fight_with_num > len(character) or fight_with_num <= 0:
-                            print("That isn't a valid character in this cave!")
-                            continue;
-                        
-                        selected_character = character[fight_with_num - 1] # subtract 1 to balance out i + 1 earlier
+                        try:
+                            fight_with_num = int(input("> "))
 
-                        # do not permit players to fight Friendly characters
-                        if isinstance(selected_character, Friendly):
-                            print(f"{selected_character} is a friend, not a foe! You can't fight them!")
+                            if fight_with_num > len(character) or fight_with_num <= 0:
+                                print(
+                                    "That isn't a valid character in this cave!")
+                                continue
 
-                        # ask player for an item to fight with
-                        print("Please select one item you want to use in battle. Input the number in brackets next to the item you would like to use.")
-                        for (i, item) in enumerate(self.items):
-                            # print index + 1 next to player's items
-                            print(f"[{i + 1}]: {item.name}")
-                        fight_item_num = int(input("> "))
-                        if fight_item_num > len(self.items) or fight_item_num <= 0:
-                            print("That isn't an item you have!")
-                            continue;
-                        
-                        selected_character.fight(self.items[fight_item_num - 1])
-                    except ValueError:
-                        print("That isn't a valid number!")
-                    except:
-                        pass
+                            # subtract 1 to balance out i + 1 earlier
+                            selected_character = character[fight_with_num - 1]
 
-                else:
-                    print("There are no one here to fight with.")
+                            # do not permit players to fight Friendly characters
+                            if isinstance(selected_character, Friendly):
+                                print(
+                                    f"{selected_character} is a friend, not a foe! You can't fight them!")
+                                continue
 
-            if command == "pat":
-                if len(characters) > 0:
-                    print("Who will you pat?")
-                    for items in inhabitance: # TODO: change the variable that handles the list of characters within the instance.
-                        print(items)
-                    pat_char = input("> ")
-                    try:
-                        if pat_char in inhabitance:
-                            if isinstance(pat_char, Friendly):
-                                print(f'You have patted {pat_char}')
-                        elif isinstance(pat_char, Enemy):
-                            print("Ain't no way you are thinking of doing that...")
-                        else:
-                            print(f'{pat_char} is not here with you')
-                    except:
-                        pass
+                            # ask player for an item to fight with
+                            print(
+                                "Please select one item you want to use in battle. Input the number in brackets next to the item you would like to use.")
+                            for (i, item) in enumerate(self.items):
+                                # print index + 1 next to player's items
+                                print(f"[{i + 1}]: {item.name}")
 
-            if command == "help":  # TODO: display tutorial page
-                print("Here is a list of commands available:")
-                print("Move: type in a number of the linked caves to move.")
-                print(
-                    "Fight: fight the appeared character/enemy with an item that you possess.")
-                print("Pat: pat the appeared character/enemy")
-                print("Shop: open up the item purchase menu when in a shop")
+                            fight_item_num = int(input("> "))
+                            if fight_item_num > len(self.items) or fight_item_num <= 0:
+                                print("That isn't an item you have!")
+                                continue
+
+                            selected_character.fight(
+                                self.items[fight_item_num - 1])
+                        except ValueError:
+                            print("That isn't a valid number!")
+                        except:
+                            pass
+
+                    else:
+                        print("There are no one here to fight with.")
+                case "pat":
+                    pass # TODO: reimplement pat
+                case "help":
+                    pass # TODO: reimplement help
+
+            # if command == "pat":
+            #     if len(characters) > 0:
+            #         print("Who will you pat?")
+            #         # TODO: change the variable that handles the list of characters within the instance.
+            #         for items in inhabitance:
+            #             print(items)
+            #         pat_char = input("> ")
+            #         try:
+            #             if pat_char in inhabitance:
+            #                 if isinstance(pat_char, Friendly):
+            #                     print(f'You have patted {pat_char}')
+            #             elif isinstance(pat_char, Enemy):
+            #                 print("Ain't no way you are thinking of doing that...")
+            #             else:
+            #                 print(f'{pat_char} is not here with you')
+            #         except:
+            #             pass
+
+            # if command == "help":  # TODO: display tutorial page
+            #     print("Here is a list of commands available:")
+            #     print("Move: type in a number of the linked caves to move.")
+            #     print(
+            #         "Fight: fight the appeared character/enemy with an item that you possess.")
+            #     print("Pat: pat the appeared character/enemy")
+            #     print("Shop: open up the item purchase menu when in a shop")
