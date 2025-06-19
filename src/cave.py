@@ -51,3 +51,6 @@ class Cave:
 
     def get_characters(self):
         return self.characters
+    
+    def get_name(self):
+        return self.name
