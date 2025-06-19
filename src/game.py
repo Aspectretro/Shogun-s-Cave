@@ -22,7 +22,7 @@ class Game:
         self.current_cave = self.map.get_cave(1)
 
         # Beginning currency
-        self.purse = 10  # TODO: shopping system impl. Gain currency on enemy death. Boss gives 50-63, smaller enemies give 5-15
+        self.purse = 20  # TODO: shopping system impl. Gain currency on enemy death. Boss gives 50-63, smaller enemies give 5-15
 
         # Whether the status message needs to be printed again
         self.status_dirty = True
@@ -117,9 +117,17 @@ class Game:
             except:
                 pass  # do nothing
 
+            # Shop item list
+            shop_menu = {'Torch': 10,
+                         'Sword': 20,
+                         'Axe': 15}
+            price = (shop_menu[cost] for cost in shop_menu)
+
             # handle other commands
             match command:
                 case "refresh":
+                    self.status_dirty = True
+                case "clear":
                     self.status_dirty = True
                 case "fight":
                     if len(self.items) <= 0:
@@ -173,32 +181,47 @@ class Game:
                     else:
                         print("There are no one here to fight with.")
                 case "pat":
-                    pass # TODO: reimplement pat
+                    if len(characters) > 0:
+                        print("Who will you pat?")
+                    # TODO: change the variable that handles the list of characters within the instance.
+                    for items in inhabitance:
+                        print(items)
+                    pat_char = input("> ")
+                    try:
+                        if pat_char in inhabitance:
+                            if isinstance(pat_char, Friendly):
+                                print(f'You have patted {pat_char}')
+                        elif isinstance(pat_char, Enemy):
+                            print("Ain't no way you are thinking of doing that...")
+                        else:
+                            print(f'{pat_char} is not here with you')
+                    except:
+                        pass
                 case "help":
-                    pass # TODO: reimplement help
+                    print("Here is a list of commands available:")
+                    print("Move: type in a number of the linked caves to move.")
+                    print("Fight: fight the appeared character/enemy with an item that you possess.")
+                    print("Pat: pat the appeared character/enemy")
+                    print("Shop: open up the item purchase menu when in a shop")
 
-            # if command == "pat":
-            #     if len(characters) > 0:
-            #         print("Who will you pat?")
-            #         # TODO: change the variable that handles the list of characters within the instance.
-            #         for items in inhabitance:
-            #             print(items)
-            #         pat_char = input("> ")
-            #         try:
-            #             if pat_char in inhabitance:
-            #                 if isinstance(pat_char, Friendly):
-            #                     print(f'You have patted {pat_char}')
-            #             elif isinstance(pat_char, Enemy):
-            #                 print("Ain't no way you are thinking of doing that...")
-            #             else:
-            #                 print(f'{pat_char} is not here with you')
-            #         except:
-            #             pass
-
-            # if command == "help":  # TODO: display tutorial page
-            #     print("Here is a list of commands available:")
-            #     print("Move: type in a number of the linked caves to move.")
-            #     print(
-            #         "Fight: fight the appeared character/enemy with an item that you possess.")
-            #     print("Pat: pat the appeared character/enemy")
-            #     print("Shop: open up the item purchase menu when in a shop")
+                case "shop":
+                    if self.current_cave.get_name() == "shop": # FIXME: Detecting that the current cave have a name of "shop"
+                        # Open shop menu
+                        print("This is the shop. A place of safety and where transactions are done.")
+                        print("If you are purchasing an item, type in the item in the product list.")
+                        print("If you are not going to purchase anything, type in leave and exit the menu.")
+                        n = 1
+                        for item in shop_menu:
+                            print(f'{n}. {item}')
+                            n += 1
+                        command = input("> ").lower()
+                        if command in shop_menu:
+                            if self.purse < price:
+                                print("You don't have enough money to purchase this item.")
+                            else:
+                                self.purse -= price
+                                print(f'You have successfully purchased {command} from the shop.')
+                                shop_menu.pop(command)
+                        
+                        if command == "leave":
+                            self.status_dirty = True
