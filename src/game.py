@@ -40,6 +40,7 @@ class Game:
         print("Fight: fight the appeared character/enemy with an item that you possess.")
         print("Pat: pat the appeared character/enemy")
         print("Shop: open up the item purchase menu when in a shop")
+        print("refresh: refresh the game window to clear up clutter")
         print("If you are already familiar with the game, enter q to skip.")
         print("\n")
 
@@ -116,6 +117,9 @@ class Game:
                 pass  # do nothing
             
             # handle other commands
+            if command == "refresh":
+                # refresh screen next loop iteration
+                self.status_dirty = True
             if command == "fight":
                 if len(self.items) <= 0:
                     print("You don't have any items to fight with...")
