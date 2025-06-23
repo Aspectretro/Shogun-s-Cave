@@ -11,6 +11,15 @@ class Game:
     All other classes are managed by an instance of this class
     """
 
+    """
+    TODO list:
+    - Boss characterization (add boss fight. Ensure it is different from normal fights with other hostiles)
+    - Egg impl (add easter egg location)
+    - Shop system fix & impl (fix setting detection)
+    - Item impl (add item, bag)
+    - Pits impl (add method & attributes for pits)
+    """
+
     def __init__(self):
         self.alive = True
         self.items = set()  # the player's items - they may only have one of each item
