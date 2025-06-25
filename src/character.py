@@ -86,15 +86,9 @@ class Ninja(Enemy):
 
 
 class Friendly(Character):
-    def __init__(self, name, description):
-        super().__init__(name, description) # initialise super class
+    def __init__(self, name, description, cave):
+        super().__init__(name, description, cave) # initialise super class
         self.conversation = None
-    
-    def set_description(self, new_desc):
-        self.description = new_desc
-    
-    def get_description(self):
-        return self.description
     
     def shop(self, item):
         pass # Potential addons by group
