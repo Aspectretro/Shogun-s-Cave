@@ -220,30 +220,34 @@ class Game:
                     print("Shop: open up the item purchase menu when in a shop")
 
                 case "shop":
-                    if self.current_cave.name == "Shop":
-                        # Open shop menu
-                        print("This is the shop. A place of safety and where transactions are done.")
-                        print("If you are purchasing an item, type in the name of the item in the product list.")
-                        print("If you are not going to purchase anything, type in leave and exit the menu.")
-                        n = 1
-                        for item in shop_menu:
-                            print(f'{n}. {item}')
-                            n += 1
-                        purchase = input("> ")
-                        cost = shop_menu[purchase]
-                        if purchase in shop_menu:
-                            if self.purse < cost:
-                                print("You don't have enough money to purchase this item.")
-                            else:
-                                self.purse -= cost
-                                print(f'You have successfully purchased {purchase} from the shop.')
-                                shop_menu.pop(purchase) # .pop methods removes the item and its corresponding value from the dictionary permanently
-                                self.items.add(purchase) # add the purchased item into the inventory
-                                if purchase == "leave":
-                                    self.status_dirty = True
-                        
-                        if purchase == "leave":
-                            self.status_dirty = True
+                    try:
+                        if self.current_cave.name == "Shop":
+                            # Open shop menu
+                            print("This is the shop. A place of safety and where transactions are done.")
+                            print("If you are purchasing an item, type in the name of the item in the product list.")
+                            print("If you are not going to purchase anything, type in leave and exit the menu.")
+                            n = 1
+                            cost = shop_menu[purchase]
+                            for item in shop_menu:
+                                print(f'{n}. {item}: ') # TODO: display the price of the products
+                                n += 1
+                            purchase = input("> ")
+                            if purchase in shop_menu:
+                                if self.purse < cost:
+                                    print("You don't have enough money to purchase this item.")
+                                else:
+                                    self.purse -= cost
+                                    print(f'You have successfully purchased {purchase} from the shop.')
+                                    shop_menu.pop(purchase) # .pop methods removes the item and its corresponding value from the dictionary permanently
+                                    self.items.add(purchase) # add the purchased item into the inventory
+                                    if purchase == "leave":
+                                        self.status_dirty = True
+                            
+                            if purchase == "leave":
+                                self.status_dirty = True
+                    except KeyError:
+                        print("Please enter the name of the item!")
+                        continue
                 
                 case "items":
                     for items in self.items:
