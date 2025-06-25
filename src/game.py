@@ -191,6 +191,7 @@ class Game:
                         except ValueError:
                             print("That isn't a valid number!")
                         except:
+                            # FIXME: error message/breakpoint check here
                             pass
 
                     else:
