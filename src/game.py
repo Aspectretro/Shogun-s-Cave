@@ -227,11 +227,11 @@ class Game:
                             print("If you are purchasing an item, type in the name of the item in the product list.")
                             print("If you are not going to purchase anything, type in leave and exit the menu.")
                             n = 1
-                            cost = shop_menu[purchase]
                             for item in shop_menu:
                                 print(f'{n}. {item}: ') # TODO: display the price of the products
                                 n += 1
                             purchase = input("> ")
+                            cost = shop_menu[purchase]
                             if purchase in shop_menu:
                                 if self.purse < cost:
                                     print("You don't have enough money to purchase this item.")
