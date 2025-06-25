@@ -205,7 +205,7 @@ class Game:
                     print("Shop: open up the item purchase menu when in a shop")
 
                 case "shop":
-                    if self.current_cave.get_name() == "shop": # FIXME: Detecting that the current cave have a name of "shop"
+                    if self.current_cave.name == "shop": # FIXME: Detecting that the current cave have a name of "shop"
                         # Open shop menu
                         print("This is the shop. A place of safety and where transactions are done.")
                         print("If you are purchasing an item, type in the item in the product list.")
