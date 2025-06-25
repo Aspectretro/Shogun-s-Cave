@@ -11,9 +11,19 @@ class Game:
     All other classes are managed by an instance of this class
     """
 
+    """
+    TODO list:
+    - Boss characterization (add boss fight. Ensure it is different from normal fights with other hostiles)
+    - Egg impl (add easter egg location)
+    - Shop system fix & impl (fix setting detection)
+    - Item impl (add item, bag)
+    - Pits impl (add method & attributes for pits)
+    """
+
     def __init__(self):
         self.alive = True
-        self.items = set()  # the player's items - they may only have one of each item at this stage
+        self.items = set()  # the player's items - they may only have one of each item
+        self.purse = 20 # currency: the player starts with 20
 
         # Generate map
         self.map = MapGraph.generate(self)
@@ -21,31 +31,36 @@ class Game:
         # initially the player begins in the starting cave
         self.current_cave = self.map.get_cave(1)
 
-        # Beginning currency
-        self.purse = 20  # TODO: shopping system impl. Gain currency on enemy death. Boss gives 50-63, smaller enemies give 5-15
-
         # Whether the status message needs to be printed again
         self.status_dirty = True
 
+    # TODO tutorial menu
     def tutorial(self):
         """Start the tutorial for the game. Does not begin the main game loop"""
 
         print("\n")
         print(
-            "Welcome to [game name]! This is the tutorial and will show you how the game works.")
+            "Welcome to Shogunate's Caverns! This is the tutorial and will show you how the game works.")
         print("In this game, you will be dropped into a series of unknown caverns, and your goal is to survive and find a way out.")
-        print("Throughout your adventure inside this deep, dark world, you will encounter monsters, and potential friendlies.")
-        print("Here is a list of commands you can use when you are within the game:")
-        print("Move: type in a number of the linked caves to move.")
-        print("Fight: fight the appeared character/enemy with an item that you possess.")
-        print("Pat: pat the appeared character/enemy")
-        print("Shop: open up the item purchase menu when in a shop")
-        print("refresh: refresh the game window to clear up clutter")
-        print("If you are already familiar with the game, enter q to skip.")
+        print("Throughout your adventure inside this deep, dark world, you will encounter various enemies and maybe even some allies.")
+        print("---") 
+        print("To interact with your environment you can issue commands to the game")
+        print("The following commands are available:")
+        print("  fight:   Start a fight with any character in the current cave. You need an item to fight them with!")
+        print("  pat:     Path any character in the current cave.")
+        print("  shop:    Open up the shop, if the current cave allows it")
+        print("  refresh: Refresh the game window to clear up clutter")
+        print("")
+        print("  Any number will be treated as a command to move to that cave")
+        print("  To issue a command, type the command's name and press Enter")
+        print("")
+        print("If you are already familiar with the game, type q and then press Enter to skip..")
         print("\n")
-
-        print("This arrow below indicates the game is listening for a command.")
+        print("This arrow below indicates the game is listening for some input.")
         command = input("> ").lower()
+
+        if command == "q":
+            return # skip this whole tutorial section
 
         # setters
     def set_cave(self, cave_num):
