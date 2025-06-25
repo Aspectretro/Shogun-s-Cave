@@ -27,9 +27,9 @@ class Character:
     def get_name(self):
         return self.name
 
-    def set_conversation(self, new_conversation):
+    def set_conversation(self, new_conv):
         """Sets this character's voice line, overriding any existing voice line"""
-        self.conversation = new_conversation
+        self.conversation = new_conv
 
     def get_conversation(self):
         return self.conversation
