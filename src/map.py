@@ -1,6 +1,8 @@
-from cave import Cave
+from cave import Cave, Shop
+from item import Item
 from character import Ninja
 import random
+
 
 class MapGraph:
     """Represents the in-game map of caves with a graph data structure
@@ -71,8 +73,10 @@ class MapGraph:
         new_map = MapGraph(game, 13)
         new_map.__add_cave(Cave(
             1, "Cave", "A small cave underground. No light seeps through although there are cracks in the ceiling", new_map), [])
-        new_map.__add_cave(Cave(
-            2, "Shop", "A nice and cozy room with a counter and some products", new_map), [1])
+        shop = Shop(
+            2, "A nice and cozy room with a counter and some products", new_map)
+        shop.add_shop_item(Item("Axe", "🪓", "A sharpened hatchet", 15))
+        new_map.__add_cave(shop, [1])
         new_map.__add_cave(Cave(
             3, "Pit", "Deep, dark, bottomless, hole. Take care with your footing", new_map), [1])
 
@@ -118,10 +122,10 @@ class MapGraph:
         """
 
         return self.matrix[a][b] == 1
-    
+
     def linked_caves(self, cave):
         """Return all the caves linked to the provided cave
-        
+
         Pass a Cave instance, and returns a list of Cave instances
         """
 
@@ -130,9 +134,9 @@ class MapGraph:
 
         linked_caves = []
         for (i, link) in enumerate(links):
-        # for every link that is valid (== 1)
+            # for every link that is valid (== 1)
             if link == 1:
                 # find that cave and append it to the linked_caves list
                 linked_caves.append(self.cave_data[i])
-        
+
         return linked_caves

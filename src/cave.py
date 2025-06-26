@@ -10,7 +10,7 @@ class Cave:
         self.map = map
 
         # Optional attributes
-        self.characters = set() # set to ensure a character cannot appear twice in a room
+        self.characters = []
         self.items = set() # similarly, an item should only appear once in a room
 
     # Setters and getters    
@@ -44,7 +44,7 @@ class Cave:
 
     # character handling
     def add_character(self, new_character):
-        self.characters.add(new_character)
+        self.characters.append(new_character)
 
     def remove_character(self, character):
         self.characters.remove(character)
@@ -54,3 +54,21 @@ class Cave:
     
     def get_name(self):
         return self.name
+
+class Shop(Cave):
+    """A special type of Cave with a shop where players can buy items"""
+
+    def __init__(self, num, description, map):
+        super().__init__(num, "Shop", description, map)
+
+        # no characters exist in the shop
+
+        self.for_sale = [] # items for sale
+
+    def add_shop_item(self, new_item):
+        self.for_sale.append(new_item)
+
+    def remove_shop_item(self, item):
+        self.for_sale.remove(item)
+
+    

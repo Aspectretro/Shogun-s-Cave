@@ -2,7 +2,9 @@ from map import MapGraph
 from item import Item
 from character import Enemy
 from character import Friendly
+from cave import Cave, Shop
 import random as r
+import display
 
 
 class Game:
@@ -23,7 +25,7 @@ class Game:
     def __init__(self):
         self.alive = True
         self.items = set()  # the player's items - they may only have one of each item
-        self.purse = 20 # currency: the player starts with 20
+        self.purse = 20  # currency: the player starts with 20
 
         # Generate map
         self.map = MapGraph.generate(self)
@@ -43,7 +45,7 @@ class Game:
             "Welcome to Shogunate's Caverns! This is the tutorial and will show you how the game works.")
         print("In this game, you will be dropped into a series of unknown caverns, and your goal is to survive and find a way out.")
         print("Throughout your adventure inside this deep, dark world, you will encounter various enemies and maybe even some allies.")
-        print("---") 
+        print("---")
         print("To interact with your environment you can issue commands to the game")
         print("The following commands are available:")
         print("  fight:   Start a fight with any character in the current cave. You need an item to fight them with!")
@@ -60,7 +62,7 @@ class Game:
         command = input("> ").lower()
 
         if command == "q":
-            return # skip this whole tutorial section
+            return  # skip this whole tutorial section
 
         # setters
     def set_cave(self, cave_num):
@@ -136,7 +138,6 @@ class Game:
             shop_menu = {'Torch': 10,
                          'Sword': 20,
                          'Axe': 15}
-            
 
             # handle other commands
             match command:
@@ -158,21 +159,19 @@ class Game:
                             print(f"[{i + 1}]: {character.name}")
 
                         try:
-                            fight_with_num = int(input("> "))
-
-                            if fight_with_num > len(character) or fight_with_num <= 0:
-                                print(
-                                    "That isn't a valid character in this cave!")
-                                continue
+                            fight_with_num = display.prompt(
+                                "Please select a character", 1, "int", lambda num: "That isn't a valid character in this cave!" if num > len(characters) or num <= 0 else True)
 
                             # subtract 1 to balance out i + 1 earlier
-                            selected_character = character[fight_with_num - 1]
+                            selected_character = characters[fight_with_num - 1]
 
                             # do not permit players to fight Friendly characters
                             if isinstance(selected_character, Friendly):
                                 print(
                                     f"{selected_character} is a friend, not a foe! You can't fight them!")
                                 continue
+
+                            print(f"Fighting the {selected_character.name}!")
 
                             # ask player for an item to fight with
                             print(
@@ -190,9 +189,9 @@ class Game:
                                 self.items[fight_item_num - 1])
                         except ValueError:
                             print("That isn't a valid number!")
-                        except:
-                            # FIXME: error message/breakpoint check here
-                            pass
+                        # except:
+                        #     # FIXME: error message/breakpoint check here
+                        #     pass
 
                     else:
                         print("There are no one here to fight with.")
@@ -216,40 +215,64 @@ class Game:
                 case "help":
                     print("Here is a list of commands available:")
                     print("Move: type in a number of the linked caves to move.")
-                    print("Fight: fight the appeared character/enemy with an item that you possess.")
+                    print(
+                        "Fight: fight the appeared character/enemy with an item that you possess.")
                     print("Pat: pat the appeared character/enemy")
                     print("Shop: open up the item purchase menu when in a shop")
 
                 case "shop":
+                    if isinstance(self.current_cave, Shop):
+                        print(
+                            "Welcome to the shop, a place of safety where transactions can be done")
+                        print(
+                            "If you are purchasing an item, type in the number next to the item on the product list.")
+
+                        for (i, item) in enumerate(self.current_cave.for_sale):
+                            print(f"[{i + 1}] {item.name}: ${item.cost}")
+
+                        print(
+                            f"[{len(self.current_cave.for_sale) + 1}] <Leave shop>")
+
+                        purchase_num = display.prompt("Please select an item to buy", 1, "int", lambda num: "That isn't a valid item" if num <= 0 or num > (
+                            len(self.current_cave.for_sale) + 1) else True)
+                        # TODO: finish shop
                     try:
                         if self.current_cave.name == "Shop":
                             # Open shop menu
-                            print("This is the shop. A place of safety and where transactions are done.")
-                            print("If you are purchasing an item, type in the name of the item in the product list.")
-                            print("If you are not going to purchase anything, type in leave and exit the menu.")
+                            print(
+                                "This is the shop. A place of safety and where transactions are done.")
+                            print(
+                                "If you are purchasing an item, type in the name of the item in the product list.")
+                            print(
+                                "If you are not going to purchase anything, type in leave and exit the menu.")
                             n = 1
                             for item in shop_menu:
-                                print(f'{n}. {item}: ') # TODO: display the price of the products
+                                # TODO: display the price of the products
+                                print(f'{n}. {item}: ')
                                 n += 1
                             purchase = input("> ")
                             cost = shop_menu[purchase]
                             if purchase in shop_menu:
                                 if self.purse < cost:
-                                    print("You don't have enough money to purchase this item.")
+                                    print(
+                                        "You don't have enough money to purchase this item.")
                                 else:
                                     self.purse -= cost
-                                    print(f'You have successfully purchased {purchase} from the shop.')
-                                    shop_menu.pop(purchase) # .pop methods removes the item and its corresponding value from the dictionary permanently
-                                    self.items.add(purchase) # add the purchased item into the inventory
+                                    print(
+                                        f'You have successfully purchased {purchase} from the shop.')
+                                    # .pop methods removes the item and its corresponding value from the dictionary permanently
+                                    shop_menu.pop(purchase)
+                                    # add the purchased item into the inventory
+                                    self.items.add(purchase)
                                     if purchase == "leave":
                                         self.status_dirty = True
-                            
+
                             if purchase == "leave":
                                 self.status_dirty = True
                     except KeyError:
                         print("Please enter the name of the item!")
                         continue
-                
+
                 case "items":
                     for items in self.items:
                         print(self.items)
