@@ -121,6 +121,9 @@ class MapGraph:
         Accepts numbers only.
         """
 
+        if a >= self.size or b >= self.size:
+            return False
+
         return self.matrix[a][b] == 1
 
     def linked_caves(self, cave):

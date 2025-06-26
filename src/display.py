@@ -1,5 +1,7 @@
 # Helper functions for handling the terminal UI
 
+import sys
+
 def prompt(message: str, level: int, return_type: str, guard):
     """Prompt the player for a response.
 
@@ -27,7 +29,7 @@ def prompt(message: str, level: int, return_type: str, guard):
         # check guard unless the type needs to be converted
         if guard is not None and return_type != "int":
             checked = guard(response)
-            if not checked:
+            if checked != True:
                 print(f"That doesn't seem right: {checked}")
                 continue  # loop until a correct response has been obtained
 
@@ -43,7 +45,7 @@ def prompt(message: str, level: int, return_type: str, guard):
                     # check guard with converted type
                     if guard is not None:
                         checked = guard(int_response)
-                        if not checked:
+                        if checked != True:
                             print(f"That doesn't seem right: {checked}")
                             continue
                     return int_response
@@ -52,11 +54,40 @@ def prompt(message: str, level: int, return_type: str, guard):
                     continue
 
 
+def confirm(message: str):
+    """Prompt the user with a Y/N confirmation"""
+    print(f"{message} [y/N]?")
+    try:
+        response = sys.stdin.readline().lower()
+
+        if response.startswith('y'):
+            return True
+
+        # default to false
+        return False
+    except:
+        return False
+
 def bold(msg: str):
     """Makes the passed text bold in the terminal by adding ANSI codes"""
     return f"\x1B[1m{msg}\x1B[22m"
 
+def dim(msg: str):
+    """Makes the passed text dimmer in the terminal by adding ANSI codes"""
+    return f"\x1B[2m{msg}\x1B[22m"
+
+def underline(msg: str):
+    """Makes the passed text underlined in the terminal by adding ANSI codes"""
+    return f"\x1B[4m{msg}\x1B[24m"
+
+def print_hint(hint: str):
+    """Print a dimmed hint message, with special characters"""
+    print(dim(f"  ╰─ Hint: {hint}"))
 
 def clear():
     """Clears the terminal"""
     print("\033[H\033[J", end="")
+
+def colour(code: int, msg: str):
+    """Makes the passed text coloured using ANSI 256-colour codes"""
+    return f"\x1B[38;5;{code}m{msg}\x1B[39m"
