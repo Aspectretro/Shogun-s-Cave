@@ -57,7 +57,7 @@ class Enemy(Character):
         pass # TODO: Stub implementation
 
 class Boss(Enemy):
-    """Final enemy of the game. After killing it, player is allowed to exit or continue to travel wihtin the caves"""
+    """Final enemy of the game. After killing it, player is allowed to exit or continue to travel within the caves"""
     def __init__(self, name, description, cave):
         super().__init__(name, description, cave)
     

@@ -3,7 +3,7 @@
 def prompt(message: str, level: int, return_type: str, guard):
     """Prompt the player for a response.
 
-    Level is an integer that represents how "nested" this promt is e.g. default command prompt is at
+    Level is an integer that represents how "nested" this prompt is e.g. default command prompt is at
     level=0, then a shop is at level=1, etc.
 
     return_type determines what type the response should be. Valid values are:
