@@ -29,7 +29,7 @@ def prompt(message: str, level: int, return_type: str, guard):
             checked = guard(response)
             if not checked:
                 print(f"That doesn't seem right: {checked}")
-                continue # loop until a correct response has been obtained
+                continue  # loop until a correct response has been obtained
 
         match return_type:
             case "str":
@@ -51,6 +51,12 @@ def prompt(message: str, level: int, return_type: str, guard):
                     print(f"That wasn't a valid whole number. Please try again!")
                     continue
 
+
 def bold(msg: str):
     """Makes the passed text bold in the terminal by adding ANSI codes"""
     return f"\x1B[1m{msg}\x1B[22m"
+
+
+def clear():
+    """Clears the terminal"""
+    print("\033[H\033[J", end="")

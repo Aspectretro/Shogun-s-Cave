@@ -94,8 +94,7 @@ class Game:
 
             # status message, print if dirty
             if self.status_dirty:
-                # magic numbers: ANSI "clear screen" characters
-                print("\033[H\033[J", end="")
+                display.clear()
                 print("---*---*---")
                 print(f"[{self.current_cave.num}]: {self.current_cave.name}")
                 print("-----------")

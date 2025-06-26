@@ -1,10 +1,10 @@
 from game import Game
+import display
 
 
 def main():
     # title screen
-    # magic numbers: ANSI "clear screen" characters
-    print("\033[H\033[J", end="") # clear screen before beginning
+    display.clear()
     print("\n")
     print("┏━━━━━━━━━━━━━━━━━━━━━┓")
     print("┣ Shogunate's Caverns ┫")
@@ -13,7 +13,7 @@ def main():
     input("> Press Enter to Start <")
     print("\033[?25h") # make cursor visible again
     game = Game()
-    print("\033[H\033[J", end="") # clear screen before tutorial
+    display.clear()
     game.tutorial()
     game.start()
 
