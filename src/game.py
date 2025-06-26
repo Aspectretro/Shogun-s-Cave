@@ -47,7 +47,7 @@ class Game:
         print("To interact with your environment you can issue commands to the game")
         print("The following commands are available:")
         print("  fight:   Start a fight with any character in the current cave. You need an item to fight them with!")
-        print("  pat:     Path any character in the current cave.")
+        print("  pat:     Pat any character in the current cave.")
         print("  shop:    Open up the shop, if the current cave allows it")
         print("  refresh: Refresh the game window to clear up clutter")
         print("")
