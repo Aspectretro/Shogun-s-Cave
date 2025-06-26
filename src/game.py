@@ -171,8 +171,7 @@ class Game(cmd.Cmd):
         print("Welcome to the shop, a place of safety where transactions are done.")
         print("Please select the item you wish to purchase by entering its number in brackets!")
 
-        print(f"You have {display.colour(220, f"${self.purse}")
-                          } | The following items are for sale:")
+        print(f"You have {display.colour(220, f'${self.purse}')} | The following items are for sale:")
 
         for (i, item) in enumerate(self.current_cave.for_sale):
             cost_display = f"${item.cost}"
