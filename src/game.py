@@ -8,8 +8,6 @@ import display
 import parsing
 import cmd
 import sys
-import tty
-import termios
 
 
 # TODO: custom help cmd
@@ -171,7 +169,8 @@ class Game(cmd.Cmd):
         print("Welcome to the shop, a place of safety where transactions are done.")
         print("Please select the item you wish to purchase by entering its number in brackets!")
 
-        print(f"You have {display.colour(220, f'${self.purse}')} | The following items are for sale:")
+        print(f"You have {display.colour(220, f'${self.purse}')
+                          } | The following items are for sale:")
 
         for (i, item) in enumerate(self.current_cave.for_sale):
             cost_display = f"${item.cost}"
@@ -247,15 +246,19 @@ class Game(cmd.Cmd):
                     line = self.cmdqueue.pop(0)
                 else:
                     self.stdout.write(self.prompt)
+                    self.stdout.write(display.dim("(command)"))
+                    # send cursor to correct starting location
+                    self.stdout.write("\033[1000D")
+                    self.stdout.write(f"\033[{len(self.prompt)}C")
                     self.stdout.flush()
                     # Construct a line from reading each character from stdin
                     line = ""
                     cursor = 0  # position of typing cursor
                     # set tty to raw to disable buffering
-                    normal_tty = termios.tcgetattr(self.stdin)
-                    tty.setraw(self.stdin)
+                    normal_tty = display.set_raw(self.stdin)
                     while True:
-                        char = self.stdin.read(1)  # read one character
+                        char = display.read_raw_char(
+                            self.stdin)  # read one character
                         char_code = ord(char)
 
                         # user hit enter key
@@ -265,23 +268,24 @@ class Game(cmd.Cmd):
                         # backspace key
                         if char_code == 127:
                             # delete one character
-                            line = line[:cursor - 1] + line[cursor:]
+                            if cursor > 0:
+                                line = line[:cursor - 1] + line[cursor:]
                             cursor = max(cursor - 1, 0)
 
                         # special key handling (ANSI '[' sequence)
                         # 3 character sequences starting with [
                         if char_code == 27:
-                            next1, next2 = ord(self.stdin.read(1)), ord(
-                                self.stdin.read(1))
+                            next1, next2 = ord(display.read_raw_char(self.stdin)), ord(
+                                display.read_raw_char(self.stdin))
 
                             if next1 == 91:
 
-                                if next2 in [50, 53, 54]: # ins, pgup, pgdn
-                                    next3 = self.stdin.read(1)
+                                if next2 in [50, 53, 54]:  # ins, pgup, pgdn
+                                    next3 = display.read_raw_char(self.stdin)
                                     # no op, just swallow "~" sign
 
                                 if next2 == 51:  # delete key
-                                    next3 = self.stdin.read(1)
+                                    next3 = display.read_raw_char(self.stdin)
                                     if next3 == "~":
                                         line = line[:cursor] + \
                                             line[cursor + 1:]
@@ -304,15 +308,16 @@ class Game(cmd.Cmd):
                         self.stdout.write("\033[1000D")
                         self.stdout.write("\033[0K")  # erase line
                         self.stdout.write(self.prompt + line)  # write line
+                        if len(line) == 0:
+                            self.stdout.write(display.dim("(command)"))
                         # send cursor to line start
                         self.stdout.write("\033[1000D")
                         # set cursor pos
                         self.stdout.write(f"\033[{cursor + len(self.prompt)}C")
                         self.stdout.flush()  # flush to terminal
                     # loop done, reset tty to normal
-                    termios.tcsetattr(
-                        self.stdin, termios.TCSADRAIN, normal_tty)
-                    print("")
+                    display.set_cooked(self.stdin, normal_tty)
+                    print("")  # Print newline
 
                     if not len(line):
                         line = 'EOF'

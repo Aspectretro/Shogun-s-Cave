@@ -1,6 +1,8 @@
 # Helper functions for handling the terminal UI
 
 import sys
+import os
+
 
 def prompt(message: str, level: int, return_type: str, guard):
     """Prompt the player for a response.
@@ -68,26 +70,65 @@ def confirm(message: str):
     except:
         return False
 
+
 def bold(msg: str):
     """Makes the passed text bold in the terminal by adding ANSI codes"""
     return f"\x1B[1m{msg}\x1B[22m"
+
 
 def dim(msg: str):
     """Makes the passed text dimmer in the terminal by adding ANSI codes"""
     return f"\x1B[2m{msg}\x1B[22m"
 
+
 def underline(msg: str):
     """Makes the passed text underlined in the terminal by adding ANSI codes"""
     return f"\x1B[4m{msg}\x1B[24m"
+
 
 def print_hint(hint: str):
     """Print a dimmed hint message, with special characters"""
     print(dim(f"  ╰─ Hint: {hint}"))
 
+
 def clear():
     """Clears the terminal"""
     print("\033[H\033[J", end="")
 
+
 def colour(code: int, msg: str):
     """Makes the passed text coloured using ANSI 256-colour codes"""
     return f"\x1B[38;5;{code}m{msg}\x1B[39m"
+
+
+def set_raw(stdin):
+    if os.name == "nt":  # windows
+        import msvcrt
+    else:  # *nix
+        import tty
+        import termios
+        normal_tty = termios.tcgetattr(stdin)
+        tty.setraw(stdin)
+        return normal_tty
+
+
+def set_cooked(stdin, normal_tty):
+    if os.name == "nt":  # windows
+        import msvcrt
+    else:  # *nix
+        import tty
+        import termios
+        termios.tcsetattr(
+            stdin, termios.TCSADRAIN, normal_tty)
+
+def read_raw_char(stdin):
+    """Read a single raw character from the tty.
+
+    Must be a raw tty if used on *nix systems
+    """
+
+    if os.name == "nt":
+        import msvcrt
+        return str(msvcrt.getwch())
+    else:
+        return stdin.read(1)
