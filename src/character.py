@@ -81,7 +81,8 @@ class Ninja(Enemy):
         print(f"You try to fight the ninja with your {item.name}, but they quickly drop a smoke bomb!")
         random_cave = self.cave.map.random_cave()
         # send player to random cave
-        self.cave.map.game.set_cave(random_cave)
+        # TODO: warning message
+        self.cave.map.game.set_cave(random_cave.num)
         print(f"The smoke clears and suddenly you're in a different cave...")
 
 

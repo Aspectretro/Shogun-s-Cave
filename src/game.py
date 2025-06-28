@@ -38,7 +38,7 @@ class Game(cmd.Cmd):
     def start(self):
         self.cmdloop()
 
-    def __set_cave(self, cave_num):
+    def set_cave(self, cave_num):
         """Set the current cave by number
 
         Does nothing if the player is not alive
@@ -103,7 +103,7 @@ class Game(cmd.Cmd):
             return print("You can't go that way!")
 
         # Set players cave
-        self.__set_cave(input_int)
+        self.set_cave(input_int)
 
     def do_fight(self, arg):
         """Start a fight with a character"""
@@ -157,17 +157,25 @@ class Game(cmd.Cmd):
 
         selected_item = self.items[fight_item_int - 1]
 
+        selected_character.fight(selected_item)
+
         # FEAT: Fight sequence
 
     def do_shop(self, arg):
         """Open up the shop in this cave, if there is one"""
+        # FEAT: Shopping system
         if not isinstance(self.current_cave, Shop):
             print("There isn't a shop here!")
             display.print_hint(
                 "You can only open the shop in caves that have a shop in them!")
             return
 
-        print("Welcome to the shop, a place of safety where transactions are done.")
+        if not len(self.current_cave.for_sale):  # out of stock! (no items for sale)
+            print("This shop is out of stock!")
+            return
+
+        print(
+            f"Welcome to the shop in cave {display.bold(self.current_cave.num)}, a place of safety where transactions are done.")
         print("Please select the item you wish to purchase by entering its number in brackets!")
 
         print(f"You have {display.colour(220, f'${self.purse}')
@@ -180,7 +188,7 @@ class Game(cmd.Cmd):
                 cost_display = display.colour(160, cost_display)
             else:  # else make it green
                 cost_display = display.colour(34, cost_display)
-            print(f"├╴ [{i + 1}] {item.name} ({cost_display})")
+            print(f"├╴ [{i + 1}] {item.emoji} {item.name} ({cost_display})")
         print(
             f"╰╴ [{len(self.current_cave.for_sale) + 1}] Leave without buying anything")
 
@@ -191,6 +199,36 @@ class Game(cmd.Cmd):
             # exit shop
             print("Leaving the shop!")
             return
+
+        # handle buying items
+        item_selected = self.current_cave.for_sale[item_int - 1]
+
+        if item_selected.cost > self.purse:
+            print(
+                f"Hey! You can't afford that item. You only have {display.colour(220, f'${self.purse}')}")
+            return
+
+        # add to player's items, remove from shop items
+        self.items.append(item_selected)
+        self.current_cave.for_sale.remove(item_selected)
+        self.purse -= item_selected.cost
+
+        print(f"You've bought a brand new {display.bold(f'{item_selected.emoji} {item_selected.name}')}! You now have {display.colour(220, f'${self.purse}')}.")
+
+    def do_inv(self, arg):
+        """Check what items you currently have"""
+        if not len(self.items):
+            print("You don't have any items right now!")
+            display.print_hint("Items can be found or bought in a 🛍️  shop")
+            return
+
+        print(f"You have {display.bold(len(self.items))} item(s).")
+        for (i, item) in enumerate(self.items):
+            if i == len(self.items) - 1: # last item has a different special character
+                print(f"╰╴ {item.emoji} {item.name}")
+            else:
+                print(f"├╴ {item.emoji} {item.name}")
+
 
     # ---
     # Overridden methods
