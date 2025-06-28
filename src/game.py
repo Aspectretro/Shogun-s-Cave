@@ -266,7 +266,7 @@ class Game(cmd.Cmd):
                             break  # exit
 
                         # backspace key
-                        if char_code == 127:
+                        if char_code == 127 or char_code == 8: # ASCII 8: windows backspace
                             # delete one character
                             if cursor > 0:
                                 line = line[:cursor - 1] + line[cursor:]
