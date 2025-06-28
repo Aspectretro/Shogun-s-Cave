@@ -129,6 +129,7 @@ def read_raw_char(stdin):
 
     if os.name == "nt":
         import msvcrt
-        return str(msvcrt.getwch())
+        char = msvcrt.getwch()
+        return str(char)
     else:
         return stdin.read(1)

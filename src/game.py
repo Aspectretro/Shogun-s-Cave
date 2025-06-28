@@ -272,14 +272,13 @@ class Game(cmd.Cmd):
                                 line = line[:cursor - 1] + line[cursor:]
                             cursor = max(cursor - 1, 0)
 
-                        # special key handling (ANSI '[' sequence)
+                        # special key handling (*nix '[' sequence),
                         # 3 character sequences starting with [
-                        if char_code == 27:
+                        if char_code == 27: # '['
                             next1, next2 = ord(display.read_raw_char(self.stdin)), ord(
                                 display.read_raw_char(self.stdin))
 
-                            if next1 == 91:
-
+                            if next1 == 91: # keys between letters and numpad
                                 if next2 in [50, 53, 54]:  # ins, pgup, pgdn
                                     next3 = display.read_raw_char(self.stdin)
                                     # no op, just swallow "~" sign
@@ -296,6 +295,18 @@ class Game(cmd.Cmd):
                                 if next2 == 67:  # right
                                     cursor = min(
                                         len(line), cursor + 1)
+                        
+                        # special key handling (win)
+                        # 2 character sequence starting with \x00
+                        if char == '\x00': # char_code == 48
+                            next_char = display.read_raw_char(self.stdin) # get next char
+
+                            if next_char == 'K': # left arrow
+                                cursor = max(cursor - 1, 0)
+                            
+                            if next_char == 'M': # right arrow
+                                cursor = min(len(line), cursor + 1)
+                            
 
                         # if character is regular ASCII character
                         # add to line buffer and +1 to index
@@ -303,11 +314,10 @@ class Game(cmd.Cmd):
                             line = line[:cursor] + char + line[cursor:]
                             cursor += 1
 
-                        # print buffered line
-                        # send cursor to line start
-                        self.stdout.write("\033[1000D")
+                        # refresh (erase and reprint) buffered line
+                        self.stdout.write("\033[1000D") # send cursor to line start
                         self.stdout.write("\033[0K")  # erase line
-                        self.stdout.write(self.prompt + line)  # write line
+                        self.stdout.write(self.prompt + line)  # re-print line
                         if len(line) == 0:
                             self.stdout.write(display.dim("(command)"))
                         # send cursor to line start
