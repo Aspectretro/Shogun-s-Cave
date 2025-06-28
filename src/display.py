@@ -102,6 +102,7 @@ def colour(code: int, msg: str):
 
 
 def set_raw(stdin):
+    """Set the TTY mode to raw for *nix-based systems. No effect on Windows"""
     if os.name == "nt":  # windows
         import msvcrt
     else:  # *nix
@@ -113,6 +114,7 @@ def set_raw(stdin):
 
 
 def set_cooked(stdin, normal_tty):
+    """Set the TTY mode back to cooked. Has no effect on Windows"""
     if os.name == "nt":  # windows
         import msvcrt
     else:  # *nix
