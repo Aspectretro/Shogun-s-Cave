@@ -2,6 +2,8 @@ from cave import Cave, Shop
 from item import Item
 from character import Ninja
 from character import Enemy
+from character import Friendly
+from character import Boss
 import random
 
 
@@ -69,11 +71,21 @@ class MapGraph:
 
     @staticmethod
     def generate(game):
+        # Character list
+        bats = Enemy("Bat", "A small filthy creature with sharp teeth", None)
+        meatsack = Enemy("Jagrit", "A chunk of meat. Quite fat in fact, like a juggernaut", None)
+        magri = Friendly("The Manual Sagri", "Short haired, bisexual boy who loves to fondle cosmo, his cat.", None)
+
+        # Boss
+        shogun = Boss("Shogun of Bizarre", "A strong and vigilant samurai with a long and sharp katana in hand.", None)
+        shogun.set_weakness("Crossbow")
+
         """Generate a new MapGraph with caves"""
 
         new_map = MapGraph(game, 13)
         new_map.__add_cave(Cave(
             1, "Cave", "A small cave underground. No light seeps through although there are cracks in the ceiling", new_map), [])
+
         shop = Shop(
             2, "A nice and cozy room with a counter and some products", new_map)
         shop.add_shop_item(Item("Axe", "🪓", "A sharpened hatchet", 15))
@@ -89,23 +101,34 @@ class MapGraph:
 
         cave5 = Cave(5, "Dungeon", "A large room with some equipment and metallic racks", new_map)
         new_map.__add_cave(cave5, [1])
-        bats = Enemy("Bat", "A small filthy creature with sharp teeth", cave5)
         cave5.add_character(bats)
 
         new_map.__add_cave(Cave(
             6, "Lava Tube", "A long, cold tunnel", new_map), [3, 2])
-        new_map.__add_cave(Cave(
-            7, "Grotto", "A cathedral of stone where time pools in the hush of dripping stalactites", new_map), [5, 3])
+        
+        cave7 = Cave(
+            7, "Grotto", "A cathedral of stone where time pools in the hush of dripping stalactites", new_map)
+        new_map.__add_cave(cave7, [5, 3])
+        cave7.add_character(meatsack)
+
         new_map.__add_cave(Cave(
             8, "Shop", "A nice and cozy room with a counter and some products", new_map), [4, 5])
         new_map.__add_cave(Cave(
             9, "Pit", "Deep, dark, bottomless, hole. Take care with your footing", new_map), [2, 4])
-        new_map.__add_cave(Cave(
-            10, "Cave", "A small cave underground. A glimpse of light and some gentle gusts of air seep through the gaps between the rocks", new_map), [8, 9])
-        new_map.__add_cave(Cave(
-            11, "Cavern", "An enormous space with a throne-like chair in the middle.", new_map), [8, 7])
-        new_map.__add_cave(Cave(
-            12, "Grotto", "A shadowed sanctuary where time drips like water from the jagged limestone.", new_map), [6, 7])
+        
+        cave10 = Cave(10, "Cave", "A small cave underground. A glimpse of light and some gentle gusts of air seep through the gaps between the rocks", new_map)
+        new_map.__add_cave(cave10, [8, 9])
+        cave10.add_character(bats)
+        
+        cave11 = Cave(
+            11, "Cavern", "An enormous space with a throne-like chair in the middle.", new_map)
+        new_map.__add_cave(cave11, [8, 7])
+        cave11.add_character(shogun)
+
+        cave12 = Cave(
+            12, "Grotto", "A shadowed sanctuary where time drips like water from the jagged limestone.", new_map)
+        new_map.__add_cave(cave12, [6, 7])
+        cave12.add_character(magri)
 
         return new_map
 
