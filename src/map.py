@@ -1,6 +1,7 @@
 from cave import Cave, Shop
 from item import Item
 from character import Ninja
+from character import Enemy
 import random
 
 
@@ -85,8 +86,12 @@ class MapGraph:
         ninja = Ninja(cave4)
         cave4.add_character(ninja)
         new_map.__add_cave(cave4, [1])
-        new_map.__add_cave(Cave(
-            5, "Dungeon", "A large room with some equipment and metallic racks", new_map), [1])
+
+        cave5 = Cave(5, "Dungeon", "A large room with some equipment and metallic racks", new_map)
+        new_map.__add_cave(cave5, [1])
+        bats = Enemy("Bat", "A small filthy creature with sharp teeth", cave5)
+        cave5.add_character(bats)
+
         new_map.__add_cave(Cave(
             6, "Lava Tube", "A long, cold tunnel", new_map), [3, 2])
         new_map.__add_cave(Cave(
