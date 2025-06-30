@@ -87,9 +87,9 @@ class MapGraph:
 
         shop = Shop(
             2, "A nice and cozy room with a counter and some products", new_map)
-        shop.add_shop_item(Item("Axe", "🪓", "A sharpened hatchet", 15))
-        shop.add_shop_item(Item("Sword", "🗡️", "A sharp blade", 20))
-        shop.add_shop_item(Item("Crossbow", "🏹", "Tension-powered launcher", 35)) # weakness of the boss
+        shop.add_shop_item(Item("Axe", "🪓", "A sharpened hatchet", 15, 50))
+        shop.add_shop_item(Item("Sword", "🗡️", "A sharp but rusty blade", 20, 20))
+        shop.add_shop_item(Item("Crossbow", "🏹", "Tension-powered launcher", 35, 30)) # weakness of the boss
         new_map.__add_cave(shop, [1])
 
         new_map.__add_cave(Cave(
