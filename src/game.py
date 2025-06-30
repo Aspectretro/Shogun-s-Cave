@@ -1,7 +1,6 @@
 from map import MapGraph
 from item import Item
-from character import Enemy
-from character import Friendly
+from character import Enemy, Friendly
 from cave import Cave, Shop
 import display
 import parsing
