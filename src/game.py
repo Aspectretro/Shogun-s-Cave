@@ -32,27 +32,26 @@ class Game(cmd.Cmd):
         self.purse = 20  # the player's coins
         self.items = []
 
-    def tutorial(self): # TODO: complete tutorial/lore section
-#         print("\n")
-#         print(
-#             "Welcome to Shogunate's Caverns! This is the tutorial and will show you how the game works.")
-#         print("In this game, you will be dropped into a series of unknown caverns, and your goal is to survive and find a way out.")
-#         print("Throughout your adventure inside this deep, dark world, you will encounter various enemies and maybe even some allies.")
-#         print("---")
-#         print("To interact with your environment you can issue commands to the game")
-#         print("The following commands are available:")
-#         print("  fight:   Start a fight with any character in the current cave. You need an item to fight them with!")
-#         print("  pat:     Pat any character in the current cave.")
-#         print("  shop:    Open up the shop, if the current cave allows it")
-#         print("  refresh: Refresh the game window to clear up clutter")
-#         print("")
-#         print("  Any number will be treated as a command to move to that cave")
-#         print("  To issue a command, type the command's name and press Enter")
-#         print("")
-#         print("If you are already familiar with the game, type q and then press Enter to skip..")
-#         print("\n")
-#         print("This arrow below indicates the game is listening for some input.")
-        pass
+    def tutorial(self): # TODO: impl this into the game
+        print("\n")
+        print(
+            "Welcome to Shogunate's Caverns! This is the tutorial and will show you how the game works.")
+        print("In this game, you will be dropped into a series of unknown caverns, and your goal is to survive and find a way out.")
+        print("Throughout your adventure inside this deep, dark world, you will encounter various enemies and maybe even some allies.")
+        print("---")
+        print("To interact with your environment you can issue commands to the game")
+        print("The following commands are available:")
+        print("  fight:   Start a fight with any character in the current cave. You need an item to fight them with!")
+        print("  pat:     Pat any character in the current cave.")
+        print("  shop:    Open up the shop, if the current cave allows it")
+        print("  refresh: Refresh the game window to clear up clutter")
+        print("")
+        print("  Any number will be treated as a command to move to that cave")
+        print("  To issue a command, type the command's name and press Enter")
+        print("")
+        print("If you are already familiar with the game, type q and then press Enter to skip..")
+        print("\n")
+        print("This arrow below indicates the game is listening for some input.")
 
     def start(self):
         self.cmdloop()
