@@ -1,6 +1,6 @@
 from map import MapGraph
 from item import Item
-from character import Enemy
+from character import Enemy, Boss
 from character import Friendly
 from cave import Cave, Shop
 import display
@@ -32,7 +32,7 @@ class Game(cmd.Cmd):
         self.purse = 20  # the player's coins
         self.items = []
 
-    def tutorial(self): # TODO: impl this into the game
+    def tutorial(self):  # TODO: impl this into the game
         print("\n")
         print(
             "Welcome to Shogunate's Caverns! This is the tutorial and will show you how the game works.")
@@ -140,7 +140,10 @@ class Game(cmd.Cmd):
 
         for (i, character) in enumerate(characters):
             # print i + 1 next to characters' names
-            print(f"├╴ [{i + 1}]: {display.underline(character.name)}")
+            name = display.underline(character.name)
+            if isinstance(character, Boss):
+                name = display.colour(1, name)
+            print(f"├╴ [{i + 1}]: {name}")
         print(f"╰╴ [{len(characters) + 1}]: Cancel fight")
 
         fight_with_int = display.prompt("Please select a character", 1, "int",
@@ -163,7 +166,7 @@ class Game(cmd.Cmd):
         print("Please select one item you want to use in battle.")
         for (i, item) in enumerate(self.items):
             # print i + 1 next to items' names
-            print(f"├╴ [{i + 1}]: {item.name}")
+            print(f"├╴ [{i + 1}]: {item.emoji}  {item.name}")
         print(f"╰╴ [{len(self.items) + 1}]: Cancel fight")
 
         fight_item_int = display.prompt("Please select an item", 1, "int", lambda num: "That isn't an item you have!" if num > len(
@@ -175,7 +178,38 @@ class Game(cmd.Cmd):
 
         selected_item = self.items[fight_item_int - 1]
 
-        selected_character.fight(selected_item)
+        # Boss battle
+        if isinstance(selected_character, Boss):
+            # handle boss battle
+            won_battle = selected_character.fight(selected_item)
+            if not won_battle:
+                self.alive = False
+                print(
+                    f"You use your {display.bold(selected_item.name)}, but the {display.underline(selected_character.name)} doesn't even budge!")
+                print(f"He strikes you with one fell swoop of his katana...")
+                print("")
+                print("GAME OVER!")
+                return True
+
+        # Regular battles
+
+        if selected_item.get_damage() == 0:
+            print(
+                f"You try to use your {display.bold(selected_item.name)} but to no avail! It is not very effective.")
+            return
+
+        won_fight = selected_character.fight(selected_item)
+
+        if won_fight:
+            # give player $20
+            self.purse += 20
+            # check for dropped items
+            items_to_give = selected_character.get_drop()
+            if items_to_give is not None:
+                self.items.append(items_to_give)
+        else:  # they have not defeated the enemy, but as it is not a boss they do not lose the game
+            print(
+                f"You fight valiantly with your {display.bold(selected_item.name)}, but the {display.underline(selected_character.name)} is not defeated!")
 
         # FEAT: Fight sequence
 
@@ -231,7 +265,8 @@ class Game(cmd.Cmd):
         self.current_cave.remove_shop_item(item_selected)
         self.purse -= item_selected.cost
 
-        print(f"You've bought a brand new {display.bold(f'{item_selected.emoji} {item_selected.name}')}! You now have {display.colour(220, f'${self.purse}')}.")
+        print(f"You've bought a brand new {display.bold(f'{item_selected.emoji} {item_selected.name}')}! You now have {
+              display.colour(220, f'${self.purse}')}.")
 
     def do_inv(self, arg):
         """Check what items you currently have"""
@@ -242,11 +277,10 @@ class Game(cmd.Cmd):
 
         print(f"You have {display.bold(len(self.items))} item(s).")
         for (i, item) in enumerate(self.items):
-            if i == len(self.items) - 1: # last item has a different special character
+            if i == len(self.items) - 1:  # last item has a different special character
                 print(f"╰╴ {item.emoji} {item.name}")
             else:
                 print(f"├╴ {item.emoji} {item.name}")
-
 
     # ---
     # Overridden methods
@@ -292,8 +326,13 @@ class Game(cmd.Cmd):
                     if len(characters) > 0:
                         print(f"You aren't alone in here! You see:")
                         for character in characters:
-                            print(
-                                f"  A {display.underline(character.name)}: {character.description}")
+                            if isinstance(character, Boss):
+                                # bosses are red
+                                print(
+                                    f"  A {display.colour(1, display.underline(character.name))}: {character.description}")
+                            else:
+                                print(
+                                    f"  A {display.underline(character.name)}: {character.description}")
                     else:
                         print(f"It seems like there is no one else here")
                     print("---*---*---")

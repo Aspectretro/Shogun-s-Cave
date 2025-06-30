@@ -73,14 +73,6 @@ class MapGraph:
     def generate(game):
         """Generate a new MapGraph with caves"""
 
-        # Character list
-        bat = Enemy("Bat", "A small filthy creature with sharp teeth", None)
-        
-        # Boss
-        shogun = Boss("Shogun of Bizarre", "A strong and vigilant samurai with a long and sharp katana in hand.", None)
-        shogun.set_weakness("Crossbow")
-
-
         new_map = MapGraph(game, 13)
         new_map.__add_cave(Cave(
             1, "Cave", "A small cave underground. No light seeps through although there are cracks in the ceiling", new_map), [])
@@ -88,8 +80,13 @@ class MapGraph:
         shop = Shop(
             2, "A nice and cozy room with a counter and some products", new_map)
         shop.add_shop_item(Item("Axe", "🪓", "A sharpened hatchet", 15, 50))
-        shop.add_shop_item(Item("Sword", "🗡️", "A sharp but rusty blade", 20, 20))
-        shop.add_shop_item(Item("Crossbow", "🏹", "Tension-powered launcher", 35, 30)) # weakness of the boss
+        shop.add_shop_item(
+            Item("Longsword", "🗡️", "A sharp but rusty blade", 20, 20))
+        shop.add_shop_item(Item(
+            "Flamethrower", "🔥", "A makeshift flamethrower made from a lighter and a deo can", 15, 15))
+        shop.add_shop_item(
+            Item("Candle", "🕯️", "A half-burnt candle with dried on wax", 5, 0))
+
         new_map.__add_cave(shop, [1])
 
         new_map.__add_cave(Cave(
@@ -101,29 +98,42 @@ class MapGraph:
         cave4.add_character(ninja)
         new_map.__add_cave(cave4, [1])
 
-        cave5 = Cave(5, "Dungeon", "A large room with some equipment and metallic racks", new_map)
+        cave5 = Cave(
+            5, "Dungeon", "A large room with some equipment and metallic racks", new_map)
         new_map.__add_cave(cave5, [1])
+        bat = Enemy(
+            "Bat", "A small filthy creature with sharp teeth", 20, cave5)
+        bat.set_weakness("Flamethrower")
         cave5.add_character(bat)
 
         new_map.__add_cave(Cave(
             6, "Lava Tube", "A long, cold tunnel", new_map), [3, 2])
-        
+
         cave7 = Cave(
             7, "Grotto", "A cathedral of stone where time pools in the hush of dripping stalactites", new_map)
         new_map.__add_cave(cave7, [5, 3])
-        cave7.add_character(meatsack)
 
+        shop2 = Shop(
+            8, "A small room lit by flickering candlelights. A counter and some products are for sale.", new_map)
+        # weakness of the boss
+        shop2.add_shop_item(
+            Item("Crossbow", "🏹", "Tension-powered launcher", 45, 30))
         new_map.__add_cave(Cave(
             8, "Shop", "A nice and cozy room with a counter and some products", new_map), [4, 5])
         new_map.__add_cave(Cave(
             9, "Shallow Pit", "A shallow pit. Careful where you step!", new_map), [2, 4])
-        
-        cave10 = Cave(10, "Cave", "A small cave underground. A glimpse of light and some gentle gusts of air seep through the gaps between the rocks", new_map)
+
+        cave10 = Cave(
+            10, "Cave", "A small cave underground. A glimpse of light and some gentle gusts of air seep through the gaps between the rocks", new_map)
         new_map.__add_cave(cave10, [8, 9])
-        
+
         cave11 = Cave(
             11, "Cavern", "An enormous space with a throne-like chair in the middle.", new_map)
         new_map.__add_cave(cave11, [8, 7])
+        shogun = Boss("Shogun of Bizarre",
+                      "A strong and vigilant samurai with a long and sharp katana in hand.", cave11)
+        shogun.set_drop(Item("Obsidian Key", "🔑", "A priceless key made of purple obsidian... could it unlock the way out?",  1_000_000))
+        shogun.set_weakness("Crossbow")
         cave11.add_character(shogun)
 
         cave12 = Cave(

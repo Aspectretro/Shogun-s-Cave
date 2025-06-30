@@ -85,7 +85,7 @@ class Boss(Enemy):
        in order to unlock the hidden ending which is located in shop 10.
     """
     def __init__(self, name, description, cave):
-        super().__init__(name, description, cave)
+        super().__init__(name, description, 1_000_000, cave)
     
     def set_weakness(self, weakness):
         return super().set_weakness(weakness)
@@ -94,12 +94,14 @@ class Boss(Enemy):
         return super().get_weakness()
     
     def fight(self, item):
-        pass
+        # You can only defeat a boss with its weakness
+        if item.name != self.weakness_item_name:
+            return False
 class Ninja(Enemy):
     """A special type of enemy that can kidnap the player and transport them to a random cave"""
 
     def __init__(self, cave):
-        super().__init__("Ninja", "A black shadowy figure that looks ready to strike", cave)
+        super().__init__("Ninja", "A black shadowy figure that looks ready to strike", 1, cave) # health doesnt matter, you can't fight ninjas
 
     def fight(self, item):
         """If a player chooses to fight with a ninja they will kidnap them"""
