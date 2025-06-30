@@ -135,3 +135,15 @@ def read_raw_char(stdin):
         return str(char)
     else:
         return stdin.read(1)
+
+def alert_box(msg: str):
+    """A console-based alert box"""
+    clear()
+    internal_len = 2 + len(msg) # 2 spaces padding
+    print(colour(1, f"╔{'═' * internal_len}╗")) # top row
+    print(f"{colour(1, '║')} {msg} {colour(1, '║')}") # msg row
+    print(colour(1, f"╚{'═' * internal_len}╝")) # bottom row
+    print("") # empty line
+    print("> Press Enter to Continue <")
+    input() # wait for enter key
+

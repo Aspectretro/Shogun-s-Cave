@@ -1,3 +1,5 @@
+import display
+
 class Character:
     """Represents a non-player character with an optional voice line
     """
@@ -97,21 +99,21 @@ class Boss(Enemy):
         # You can only defeat a boss with its weakness
         if item.name != self.weakness_item_name:
             return False
+
 class Ninja(Enemy):
     """A special type of enemy that can kidnap the player and transport them to a random cave"""
 
     def __init__(self, cave):
-        super().__init__("Ninja", "A black shadowy figure that looks ready to strike", 1, cave) # health doesnt matter, you can't fight ninjas
+        super().__init__("Ninja", "A black shadowy figure that looks ready to strike", 1, cave) # health doesn't matter, you can't fight ninjas
 
     def fight(self, item):
         """If a player chooses to fight with a ninja they will kidnap them"""
         # kidnapping procedure
-        print(f"You try to fight the ninja with your {item.name}, but they quickly drop a smoke bomb!")
+        display.alert_box(f"You try to fight the ninja with your {item.name}, but they quickly drop a smoke bomb!")
         random_cave = self.cave.map.random_cave()
         # send player to random cave
-        # TODO: warning message
         self.cave.map.game.set_cave(random_cave.num)
-        print(f"The smoke clears and suddenly you're in a different cave...")
+        display.alert_box(f"The smoke clears and you're suddenly in a different cave!")
 
 
 class Friendly(Character):
