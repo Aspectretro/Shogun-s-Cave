@@ -79,11 +79,11 @@ class MapGraph:
             2, "A nice and cozy room with a counter and some products", new_map)
         shop.add_shop_item(Item("Axe", "🪓", "A sharpened hatchet", 15, 50))
         shop.add_shop_item(
-            Item("Longsword", "🗡️", "A sharp but rusty blade", 20, 20))
+            Item("Longsword", "🗡️ ", "A sharp but rusty blade", 20, 20))
         shop.add_shop_item(Item(
             "Flamethrower", "🔥", "A makeshift flamethrower made from a lighter and a deo can", 15, 15))
         shop.add_shop_item(
-            Item("Candle", "🕯️", "A half-burnt candle with dried on wax", 5, 0))
+            Item("Candle", "🕯️ ", "A half-burnt candle with dried on wax", 5, 0))
 
         new_map.__add_cave(shop, [1])
 
@@ -121,8 +121,7 @@ class MapGraph:
         shop2.add_shop_item(
             Item("Cricket Bat", "🏏", "Swing for your life" ,40, 15)
         )
-        new_map.__add_cave(Cave(
-            8, "Shop", "A nice and cozy room with a counter and some products", new_map), [4, 5])
+        new_map.__add_cave(shop2, [4, 5])
         new_map.__add_cave(Cave(
             9, "Shallow Pit", "A shallow pit. Careful where you step!", new_map), [2, 4])
 
@@ -143,6 +142,7 @@ class MapGraph:
             12, "Grotto", "A shadowed sanctuary where time drips like water from the jagged limestone.", new_map)
         new_map.__add_cave(cave12, [6, 7])
         goblin = Enemy("Goblin", "A little green stinky beast with an eye for your gold", 5, cave12)
+        goblin.set_conversation("Gold... gold....")
         cave12.add_character(goblin)
 
         return new_map
