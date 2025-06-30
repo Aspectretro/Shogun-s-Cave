@@ -228,7 +228,7 @@ class Game(cmd.Cmd):
 
         # add to player's items, remove from shop items
         self.items.append(item_selected)
-        self.current_cave.for_sale.remove(item_selected)
+        self.current_cave.remove_shop_item(item_selected)
         self.purse -= item_selected.cost
 
         print(f"You've bought a brand new {display.bold(f'{item_selected.emoji} {item_selected.name}')}! You now have {display.colour(220, f'${self.purse}')}.")

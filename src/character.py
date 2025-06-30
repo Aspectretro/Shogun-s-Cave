@@ -39,22 +39,44 @@ class Enemy(Character):
     """Represents a character that acts as an enemy to the player
     """
 
-    def __init__(self, name, description, cave):
+    def __init__(self, name, description, health, cave):
         super().__init__(name, description, cave)  # initialise superclass
 
+        self.health = health
+
         # Optional attributes
-        self.weakness = None
+        self.weakness_item_name = None # defeats the enemy right away
+        self.drop = None # item this enemy drops on defeat
 
     # Setters and getters
     def set_weakness(self, weakness):
         """Sets this enemy's weakness, overriding any existing value. Pass None for no weakness"""
-        self.weakness = weakness
+        self.weakness_item_name = weakness
 
     def get_weakness(self):
-        return self.weakness
+        return self.weakness_item_name
+
+    def set_drop(self, item):
+        """Set this enemy's drop item"""
+        self.drop = item
+
+    def get_drop(self):
+        """Get the item this enemy drops"""
+        return self.drop
 
     def fight(self, item):
-        pass # TODO: Stub implementation
+        """Fight sequence for this enemy"""
+        if item.name == self.weakness_item_name:
+            # enemy defeated!
+            return True
+        if item.damage >= self.health:
+            # enemy defeated!
+            return True
+        else:
+            # damage enemy but not defeated
+            self.health -= item.damage
+            return False
+        
 
 class Boss(Enemy):
     """Final enemy of the game. After killing it, player is allowed to exit or continue to travel within the caves
