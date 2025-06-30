@@ -140,10 +140,27 @@ def alert_box(msg: str):
     """A console-based alert box"""
     clear()
     internal_len = 2 + len(msg) # 2 spaces padding
+    # colour 1 = red
     print(colour(1, f"╔{'═' * internal_len}╗")) # top row
     print(f"{colour(1, '║')} {msg} {colour(1, '║')}") # msg row
     print(colour(1, f"╚{'═' * internal_len}╝")) # bottom row
     print("") # empty line
     print("> Press Enter to Continue <")
     input() # wait for enter key
+    clear()
 
+def speech_box(msg: str, speaker: str):
+    """An alert box attributed to a speaker"""
+    clear()
+    internal_len = 2 + len(msg) # 2 spaces padding
+    speaker_padding = internal_len - 3 - len(speaker) # space and em dash + speaker
+    # colour 1 = red
+    print(colour(1, f"╔{'═' * internal_len}╗")) # top row
+    print(f"{colour(1, '║')} {msg} {colour(1, '║')}") # msg row
+    print(colour(1, f"║{' ' * internal_len}║")) # padding row
+    print(f"{colour(1, '║')}{' ' * speaker_padding}— {speaker} {colour(1, '║')}") # speaker row 
+    print(colour(1, f"╚{'═' * internal_len}╝")) # bottom row
+    print("") # empty line
+    print("> Press Enter to Continue <")
+    input() # wait for enter key
+    clear()

@@ -328,7 +328,7 @@ class Game(cmd.Cmd):
                             if isinstance(character, Boss):
                                 # bosses are red
                                 print(
-                                    f"  A {display.colour(1, display.underline(character.name))}: {character.description}")
+                                    f"  The {display.colour(1, display.underline(character.name))}: {character.description}")
                             else:
                                 print(
                                     f"  A {display.underline(character.name)}: {character.description}")

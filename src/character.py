@@ -96,6 +96,8 @@ class Boss(Enemy):
         return super().get_weakness()
     
     def fight(self, item):
+        # Boss fight sequence
+        display.speech_box("You dare challenge me, little fool?", self.name)
         # You can only defeat a boss with its weakness
         if item.name != self.weakness_item_name:
             return False
