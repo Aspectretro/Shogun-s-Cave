@@ -72,9 +72,7 @@ class MapGraph:
     @staticmethod
     def generate(game):
         # Character list
-        bats = Enemy("Bat", "A small filthy creature with sharp teeth", None)
-        meatsack = Enemy("Jagrit", "A chunk of meat. Quite fat in fact, like a juggernaut", None)
-        magri = Friendly("The Manual Sagri", "Short haired, bisexual boy who loves to fondle cosmo, his cat.", None)
+        bat = Enemy("Bat", "A small filthy creature with sharp teeth", None)
 
         # Boss
         shogun = Boss("Shogun of Bizarre", "A strong and vigilant samurai with a long and sharp katana in hand.", None)
@@ -89,7 +87,10 @@ class MapGraph:
         shop = Shop(
             2, "A nice and cozy room with a counter and some products", new_map)
         shop.add_shop_item(Item("Axe", "🪓", "A sharpened hatchet", 15))
+        shop.add_shop_item(Item("Sword", "🗡️", "A sharp blade", 20))
+        shop.add_shop_item(Item("Crossbow", "🏹", "Tension-powered launcher", 35)) # weakness of the boss
         new_map.__add_cave(shop, [1])
+
         new_map.__add_cave(Cave(
             3, "Pit", "Deep, dark, bottomless, hole. Take care with your footing", new_map), [1])
 
@@ -101,7 +102,7 @@ class MapGraph:
 
         cave5 = Cave(5, "Dungeon", "A large room with some equipment and metallic racks", new_map)
         new_map.__add_cave(cave5, [1])
-        cave5.add_character(bats)
+        cave5.add_character(bat)
 
         new_map.__add_cave(Cave(
             6, "Lava Tube", "A long, cold tunnel", new_map), [3, 2])
@@ -109,16 +110,20 @@ class MapGraph:
         cave7 = Cave(
             7, "Grotto", "A cathedral of stone where time pools in the hush of dripping stalactites", new_map)
         new_map.__add_cave(cave7, [5, 3])
-        cave7.add_character(meatsack)
+        cave7.add_character(None)
 
-        new_map.__add_cave(Cave(
-            8, "Shop", "A nice and cozy room with a counter and some products", new_map), [4, 5])
+        shop = Shop(8, "A nice and cozy room with a counter and some products", new_map)
+        new_map.__add_cave(shop, [4, 5])
+        shop.add_shop_item(Item("Candle", "🕯️", "Lighting within the deep dark", 5))
+        shop.add_shop_item(Item("Cricket Bat", "🏏", "Swing for your life", 40))
+        shop.add_shop_item(Item("Obsidian Key", "🗝️", "A hidden truth", 200))
+        
         new_map.__add_cave(Cave(
             9, "Pit", "Deep, dark, bottomless, hole. Take care with your footing", new_map), [2, 4])
         
         cave10 = Cave(10, "Cave", "A small cave underground. A glimpse of light and some gentle gusts of air seep through the gaps between the rocks", new_map)
         new_map.__add_cave(cave10, [8, 9])
-        cave10.add_character(bats)
+        cave10.add_character(bat)
         
         cave11 = Cave(
             11, "Cavern", "An enormous space with a throne-like chair in the middle.", new_map)
@@ -128,7 +133,7 @@ class MapGraph:
         cave12 = Cave(
             12, "Grotto", "A shadowed sanctuary where time drips like water from the jagged limestone.", new_map)
         new_map.__add_cave(cave12, [6, 7])
-        cave12.add_character(magri)
+        cave12.add_character(None)
 
         return new_map
 
