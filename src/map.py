@@ -1,9 +1,7 @@
 from cave import Cave, Shop
 from item import Item
 from character import Ninja
-from character import Enemy
-from character import Friendly
-from character import Boss
+from character import Enemy, Friendly, Boss
 import random
 
 
@@ -75,11 +73,14 @@ class MapGraph:
 
         # Character list
         bat = Enemy("Bat", "A small filthy creature with sharp teeth", None)
+        goblin = Enemy("Goblin", "Short green blob who likes to horde a lone adventurer", None)
+
+        slime = Friendly("Slime 🔴🙂", "A friendly, cute slime who is just vibing on the side", None)
         
         # Boss
         shogun = Boss("Shogun of Bizarre", "A strong and vigilant samurai with a long and sharp katana in hand.", None)
         shogun.set_weakness("Crossbow")
-
+        shogun.set_drop(Item("Obsidian Key"))
 
         new_map = MapGraph(game, 13)
         new_map.__add_cave(Cave(
@@ -105,16 +106,20 @@ class MapGraph:
         new_map.__add_cave(cave5, [1])
         cave5.add_character(bat)
 
-        new_map.__add_cave(Cave(
-            6, "Lava Tube", "A long, cold tunnel", new_map), [3, 2])
+        cave6 = Cave(6, "Lava Tube", "A long, cold tunnel", new_map)
+        new_map.__add_cave(cave6, [3, 2])
+        cave6.add_character(slime)
         
         cave7 = Cave(
             7, "Grotto", "A cathedral of stone where time pools in the hush of dripping stalactites", new_map)
         new_map.__add_cave(cave7, [5, 3])
-        cave7.add_character(meatsack)
+        cave7.add_character(goblin)
 
-        new_map.__add_cave(Cave(
-            8, "Shop", "A nice and cozy room with a counter and some products", new_map), [4, 5])
+        shop = Shop(8, "A nice and cozy room with a counter and some products", new_map)
+        new_map.__add_cave(shop, [4, 5])
+        shop.add_shop_item(Item("Candle", "🕯️", "Lighting within the deep dark", 5))
+        shop.add_shop_item(Item("Cricket Bat", "🏏", "Swing for your life", 40))
+
         new_map.__add_cave(Cave(
             9, "Shallow Pit", "A shallow pit. Careful where you step!", new_map), [2, 4])
         
@@ -124,12 +129,12 @@ class MapGraph:
         cave11 = Cave(
             11, "Cavern", "An enormous space with a throne-like chair in the middle.", new_map)
         new_map.__add_cave(cave11, [8, 7])
-        cave11.add_character(shogun)
+        cave11.add_character(shogun) # Boss room
 
         cave12 = Cave(
             12, "Grotto", "A shadowed sanctuary where time drips like water from the jagged limestone.", new_map)
         new_map.__add_cave(cave12, [6, 7])
-        cave12.add_character(None)
+        cave12.add_character(goblin)
 
         return new_map
 
