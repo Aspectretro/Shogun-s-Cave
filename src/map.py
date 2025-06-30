@@ -1,9 +1,7 @@
 from cave import Cave, Shop
 from item import Item
 from character import Ninja
-from character import Enemy
-from character import Friendly
-from character import Boss
+from character import Enemy, Friendly, Boss
 import random
 
 
@@ -106,8 +104,11 @@ class MapGraph:
         bat.set_weakness("Flamethrower")
         cave5.add_character(bat)
 
-        new_map.__add_cave(Cave(
-            6, "Lava Tube", "A long, cold tunnel", new_map), [3, 2])
+        cave6 = Cave(
+            6, "Lava Tube", "A long, cold tunnel", new_map)
+        new_map.__add_cave(cave6, [3, 2])
+        slime = Friendly("Red Slime", "A cute red blob that's just ✨ vibing ✨", cave6)
+        cave6.add_character(slime)
 
         cave7 = Cave(
             7, "Grotto", "A cathedral of stone where time pools in the hush of dripping stalactites", new_map)
@@ -115,9 +116,11 @@ class MapGraph:
 
         shop2 = Shop(
             8, "A small room lit by flickering candlelights. A counter and some products are for sale.", new_map)
-        # weakness of the boss
         shop2.add_shop_item(
-            Item("Crossbow", "🏹", "Tension-powered launcher", 45, 30))
+            Item("Crossbow", "🏹", "Tension-powered launcher", 45, 30)) # weakness of the boss
+        shop2.add_shop_item(
+            Item("Cricket Bat", "🏏", "Swing for your life" ,40, 15)
+        )
         new_map.__add_cave(Cave(
             8, "Shop", "A nice and cozy room with a counter and some products", new_map), [4, 5])
         new_map.__add_cave(Cave(
@@ -131,7 +134,7 @@ class MapGraph:
             11, "Cavern", "An enormous space with a throne-like chair in the middle.", new_map)
         new_map.__add_cave(cave11, [8, 7])
         shogun = Boss("Shogun of Bizarre",
-                      "A strong and vigilant samurai with a long and sharp katana in hand.", cave11)
+                      "A strong and vigilant samurai with a sharp katana in hand", cave11)
         shogun.set_drop(Item("Obsidian Key", "🔑", "A priceless key made of purple obsidian... could it unlock the way out?",  1_000_000))
         shogun.set_weakness("Crossbow")
         cave11.add_character(shogun)
@@ -139,7 +142,8 @@ class MapGraph:
         cave12 = Cave(
             12, "Grotto", "A shadowed sanctuary where time drips like water from the jagged limestone.", new_map)
         new_map.__add_cave(cave12, [6, 7])
-        cave12.add_character(None)
+        goblin = Enemy("Goblin", "A little green stinky beast with an eye for your gold", 5, cave12)
+        cave12.add_character(goblin)
 
         return new_map
 
