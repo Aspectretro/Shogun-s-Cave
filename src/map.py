@@ -134,6 +134,9 @@ class MapGraph:
         shop2.add_shop_item(
             Item("Cricket Bat", "🏏", "Swing for your life", 40, 15)
         )
+        mysterious_shopkeeper = Friendly("Mysterious Shopkeeper", "A mysterious shopkeeper", shop2)
+        mysterious_shopkeeper.set_conversation("Have you seen the key anywhere... I heard it's worth lots...")
+        shop2.add_character(mysterious_shopkeeper)
         new_map.__add_cave(shop2, [4, 5])
         new_map.__add_cave(Cave(
             9, "Shallow Pit", "A shallow pit. Careful where you step!", new_map), [2, 4])
