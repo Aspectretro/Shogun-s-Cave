@@ -107,24 +107,28 @@ class MapGraph:
         cave6 = Cave(
             6, "Lava Tube", "A long, cold tunnel", new_map)
         new_map.__add_cave(cave6, [3, 2])
-        slime = Friendly("Red Slime", "A small red blob that's just ✨ vibing ✨", cave6)
+        slime = Friendly(
+            "Red Slime", "A small red blob that's just ✨ vibing ✨", cave6)
         slime.set_conversation("Hello! It's cold in here, isn't it?")
         cave6.add_character(slime)
 
         cave7 = Cave(
             7, "Grotto", "A cathedral of stone where time pools in the hush of dripping stalactites", new_map)
         # the shogun's lost cat
-        minchu = Friendly("Minchu", "A very cute ragdoll cat that seems to be lost", cave7)
+        minchu = Friendly(
+            "Minchu", "A very cute ragdoll cat that seems to be lost", cave7)
         cave7.add_character(minchu)
-        minchu.set_conversation("Meow... I think my owner is in the cave next to here... *purrs*")
+        minchu.set_conversation(
+            "Meow... I think my owner is in the cave next to here... *purrs*")
         new_map.__add_cave(cave7, [5, 3])
 
         shop2 = Shop(
             8, "A small room lit by flickering candlelights. A counter and some products are for sale.", new_map)
         shop2.add_shop_item(
-            Item("Crossbow", "🏹", "Tension-powered launcher", 45, 30)) # weakness of the boss
+            # weakness of the boss
+            Item("Crossbow", "🏹", "Tension-powered launcher", 45, 30))
         shop2.add_shop_item(
-            Item("Cricket Bat", "🏏", "Swing for your life" ,40, 15)
+            Item("Cricket Bat", "🏏", "Swing for your life", 40, 15)
         )
         new_map.__add_cave(shop2, [4, 5])
         new_map.__add_cave(Cave(
@@ -139,14 +143,16 @@ class MapGraph:
         new_map.__add_cave(cave11, [8, 7])
         shogun = Boss("Shogun of Bizarre",
                       "A strong and vigilant samurai with a sharp katana in hand", cave11)
-        shogun.set_drop(Item("Obsidian Key", "🔑", "A priceless key made of purple obsidian... could it unlock the way out?",  1_000_000))
+        shogun.set_drop(Item(
+            "Obsidian Key", "🔑", "A priceless key made of purple obsidian... could it unlock the way out?",  1_000_000))
         shogun.set_weakness("Crossbow")
         cave11.add_character(shogun)
 
         cave12 = Cave(
             12, "Grotto", "A shadowed sanctuary where time drips like water from the jagged limestone.", new_map)
         new_map.__add_cave(cave12, [6, 7])
-        goblin = Enemy("Goblin", "A little green stinky beast with an eye for your gold", 5, cave12)
+        goblin = Enemy(
+            "Goblin", "A little green stinky beast with an eye for your gold", 5, cave12)
         goblin.set_conversation("Got any gold?")
         cave12.add_character(goblin)
 
