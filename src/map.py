@@ -84,6 +84,10 @@ class MapGraph:
             "Flamethrower", "🔥", "A makeshift flamethrower made from a lighter and a deo can", 15, 15))
         shop.add_shop_item(
             Item("Candle", "🕯️ ", "A half-burnt candle with dried on wax", 5, 0))
+        shopkeeper = Friendly("Shopkeeper", "A friendly shopkeeper", shop) # FEAT: polymorphism, Shop is a child of Cave
+        shopkeeper.set_conversation("") # TODO: shopkeeper conversation
+        shop.add_character(shopkeeper)
+
 
         new_map.__add_cave(shop, [1])
 
