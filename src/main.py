@@ -3,9 +3,6 @@ import display
 
 
 def main():
-    # terminal setup
-    print('\033[97;"B";p', end='')
-
     # title screen
     display.clear()
     print("\n")
