@@ -33,25 +33,44 @@ class Game(cmd.Cmd):
         self.items = []
 
     def tutorial(self):  # TODO: impl this into the game
-        print("\n")
+        display.clear()
+        print("") # empty line
         print(
-            "Welcome to Shogunate's Caverns! This is the tutorial and will show you how the game works.")
-        print("In this game, you will be dropped into a series of unknown caverns, and your goal is to survive and find a way out.")
-        print("Throughout your adventure inside this deep, dark world, you will encounter various enemies and maybe even some allies.")
+            f"Welcome to the {display.bold('Shogunate\'s Caverns!')} This is the tutorial and will show you how the game works.")
+        print("") # empty line
+        print(f"In this text-based game, you will be dropped into unknown caverns — survive, defeat the {display.colour(1, 'boss')} and find a way out!")
+        print(f"Throughout your adventure inside this deep, dark world, you will encounter various {display.underline('characters')}, both friend and foe.")
+        print(f"You can gain valuable {display.colour(220, 'money')} by defeating enemies with weapons bought from the 🛍️  shops!")
+        print("") # empty line
+        print("Press Enter to continue, or type q and then Enter to skip the rest of the tutorial")
+        skip = input("> ")
+        if skip == "q":
+            return # skip tutorial
+        display.clear()
+        print(f"In these caverns, each cave is given a [{display.bold('number')}] and a name... Use these numbers to refer to the caves you want to move to!")
+        print(f"BEWARE! Not all caves are accessible from the start. Explore these caverns... but don't get lost!")
         print("---")
         print("To interact with your environment you can issue commands to the game")
         print("The following commands are available:")
+        print("  move:    Move to a connected cave. Specify the number of the cave.")
         print("  fight:   Start a fight with any character in the current cave. You need an item to fight them with!")
-        print("  pat:     Pat any character in the current cave.")
-        print("  shop:    Open up the shop, if the current cave allows it")
+        print("  talk:    Talk to a character in the current cave")
+        print("  shop:    Open up the shop, if there is one in this cave")
         print("  refresh: Refresh the game window to clear up clutter")
+        print("  inv:     Check out your inventory and your money")
+        print("  quit:    Quit and close the game")
+        print("  help:    Bring up a list of commands")
+        print("To issue a command, type the command's name and press Enter")
+        display.print_hint("Sometimes, you'll get a hint like this. Pay close attention!")
+        print("---")
         print("")
-        print("  Any number will be treated as a command to move to that cave")
-        print("  To issue a command, type the command's name and press Enter")
+        print("The arrow below indicates the game is listening for some input. Press Enter to continue")
+        input("> ")
+        display.clear()
+        print("Got that? That's the end of the tutorial for now. Good luck on your journey through the Shogunate's Caverns!")
         print("")
-        print("If you are already familiar with the game, type q and then press Enter to skip..")
-        print("\n")
-        print("This arrow below indicates the game is listening for some input.")
+        print("> Press Enter to Continue <")
+        input()
 
     def start(self):
         self.cmdloop()
