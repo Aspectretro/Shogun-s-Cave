@@ -108,6 +108,7 @@ class MapGraph:
             6, "Lava Tube", "A long, cold tunnel", new_map)
         new_map.__add_cave(cave6, [3, 2])
         slime = Friendly("Red Slime", "A cute red blob that's just ✨ vibing ✨", cave6)
+        slime.set_conversation("Hello! It's cold in here, isn't it?")
         cave6.add_character(slime)
 
         cave7 = Cave(
