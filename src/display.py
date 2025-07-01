@@ -2,6 +2,7 @@
 
 import sys
 import os
+import re
 
 
 def prompt(message: str, level: int, return_type: str, guard):
@@ -123,6 +124,7 @@ def set_cooked(stdin, normal_tty):
         termios.tcsetattr(
             stdin, termios.TCSADRAIN, normal_tty)
 
+
 def read_raw_char(stdin):
     """Read a single raw character from the tty.
 
@@ -136,31 +138,57 @@ def read_raw_char(stdin):
     else:
         return stdin.read(1)
 
+
 def alert_box(msg: str):
     """A console-based alert box"""
     clear()
-    internal_len = 2 + len(msg) # 2 spaces padding
+    internal_len = 2 + visual_len(msg)  # 2 spaces padding
     # colour 1 = red
-    print(colour(1, f"╔{'═' * internal_len}╗")) # top row
-    print(f"{colour(1, '║')} {msg} {colour(1, '║')}") # msg row
-    print(colour(1, f"╚{'═' * internal_len}╝")) # bottom row
-    print("") # empty line
+    print(colour(1, f"╔{'═' * internal_len}╗"))  # top row
+    print(f"{colour(1, '║')} {msg} {colour(1, '║')}")  # msg row
+    print(colour(1, f"╚{'═' * internal_len}╝"))  # bottom row
+    print("")  # empty line
     print("> Press Enter to Continue <")
-    input() # wait for enter key
+    input()  # wait for enter key
     clear()
 
-def speech_box(msg: str, speaker: str):
+
+def multiline_alert_box(msgs: list[str], colour_code=1):  # colour_code is 1
+    """A multi-line console-based alert box. Each line should be its own item in the list"""
+    clear()
+    # 2 spaces padding, find longest line
+    internal_len = 2 + visual_len(max(msgs, key=visual_len))
+    print(colour(colour_code, f"╔{'═' * internal_len}╗"))  # top row
+    for line in msgs:
+        #                                                to account for padding space _______
+        print(f"{colour(colour_code, '║')} {line}{' ' * (internal_len - visual_len(line) - 1)}{colour(colour_code, '║')}")
+    print(colour(colour_code, f"╚{'═' * internal_len}╝"))  # bottom row
+    print("")  # empty line
+    print("> Press Enter to Continue <")
+    input()  # wait for enter key
+    clear()
+
+
+
+def speech_box(msg: str, speaker: str, colour_code=1):  # colour_code 1 is red
     """An alert box attributed to a speaker"""
     clear()
-    internal_len = 2 + len(msg) # 2 spaces padding
-    speaker_padding = internal_len - 3 - len(speaker) # space and em dash + speaker
-    # colour 1 = red
-    print(colour(1, f"╔{'═' * internal_len}╗")) # top row
-    print(f"{colour(1, '║')} {msg} {colour(1, '║')}") # msg row
-    print(colour(1, f"║{' ' * internal_len}║")) # padding row
-    print(f"{colour(1, '║')}{' ' * speaker_padding}— {speaker} {colour(1, '║')}") # speaker row 
-    print(colour(1, f"╚{'═' * internal_len}╝")) # bottom row
-    print("") # empty line
+    internal_len = 2 + visual_len(msg)  # 2 spaces padding
+    speaker_padding = internal_len - 3 - \
+        visual_len(speaker)  # space and em dash + speaker
+    print(colour(colour_code, f"╔{'═' * internal_len}╗"))  # top row
+    print(f"{colour(colour_code, '║')} {msg} {colour(colour_code, '║')}")  # msg row
+    print(colour(colour_code, f"║{' ' * internal_len}║"))  # padding row
+    # speaker row
+    print(f"{colour(colour_code, '║')}{' ' * speaker_padding}— {speaker} {colour(colour_code, '║')}")
+    print(colour(colour_code, f"╚{'═' * internal_len}╝"))  # bottom row
+    print("")  # empty line
     print("> Press Enter to Continue <")
-    input() # wait for enter key
+    input()  # wait for enter key
     clear()
+
+def visual_len(test: str) -> int:
+    """Get the visual (column) length of a string by excluding ANSI control characters"""
+    # Finding ANSI control characters
+    regex = re.compile("[\\u001B\\u009B][[\\]()#;?]*(?:(?:(?:(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]+)*|[a-zA-Z\\d]+(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?(?:\\u0007|\\u001B\\u005C|\\u009C))|(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TZcf-nq-uy=><~]))")
+    return len(regex.sub("", test))

@@ -183,11 +183,14 @@ class Game(cmd.Cmd):
             won_battle = selected_character.fight(selected_item)
             if not won_battle:
                 self.alive = False
-                print(
-                    f"You use your {display.bold(selected_item.name)}, but the {display.underline(selected_character.name)} doesn't even budge!")
-                print(f"He strikes you with one fell swoop of his katana...")
-                print("")
-                print("GAME OVER!")
+                display.multiline_alert_box([
+                    f"You use your {display.bold(selected_item.name)}, but the {display.underline(selected_character.name)} doesn't even budge!",
+                    "", # empty line
+                    "He strikes you with one fell swoop of his katana...",
+                    "", # 2 empty lines
+                    "",
+                    display.bold(display.underline(display.colour(1, "GAME OVER!!!")))
+                ])
                 return True
 
         # Regular battles
@@ -211,6 +214,35 @@ class Game(cmd.Cmd):
                 f"You fight valiantly with your {display.bold(selected_item.name)}, but the {display.underline(selected_character.name)} is not defeated!")
 
         # FEAT: Fight sequence
+
+    def do_talk(self, arg):
+        """Start a conversation with a specific character"""
+        characters = self.current_cave.characters
+        if not len(characters):
+            print("There is no one here to talk to!")
+            return
+
+        print("Select a character to talk to by inputting the numbers next to their name")
+
+        for (i, character) in enumerate(characters):
+            # print i + 1 next to characters' names
+            name = display.underline(character.name)
+            if isinstance(character, Boss):
+                name = display.colour(1, name)
+            print(f"├╴ [{i + 1}]: {name}")
+        print(f"╰╴ [{len(characters) + 1}]: Cancel conversation")
+
+        talk_with_int = display.prompt("Please select a character", 1, "int",
+                                        lambda num: "That isn't a valid option" if num > len(characters) + 1 or num <= 0 else True)
+
+        selected_character = characters[talk_with_int - 1]
+
+        if selected_character.conversation is None:
+            print(f"This {selected_character.name} doesn't want to talk to you.")
+            return
+
+        display.speech_box(selected_character.conversation, selected_character.name, colour_code=8)
+        self.__set_dirty()
 
     def do_shop(self, arg):
         """Open up the shop in this cave, if there is one"""
