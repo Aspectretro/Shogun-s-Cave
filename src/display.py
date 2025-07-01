@@ -59,7 +59,7 @@ def prompt(message: str, level: int, return_type: str, guard):
 
 def confirm(message: str):
     """Prompt the user with a Y/N confirmation"""
-    print(f"{message} [y/N]?")
+    print(f"{message} [y/N] and then press Enter?")
     try:
         response = sys.stdin.readline().lower()
 
