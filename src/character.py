@@ -122,6 +122,3 @@ class Friendly(Character):
     def __init__(self, name, description, cave):
         super().__init__(name, description, cave) # initialise super class
         self.conversation = None
-    
-    def shop(self, item):
-        pass # Potential addons by group
