@@ -1,6 +1,6 @@
 from map import MapGraph
 from item import Item
-from character import Enemy, Friendly, Boss
+from character import Enemy, Friendly, Boss, Ninja
 from cave import Cave, Shop
 import display
 import parsing
@@ -8,6 +8,7 @@ import parsing
 # stdlib
 import cmd
 import sys
+import math
 
 
 # TODO: custom help cmd
@@ -185,33 +186,59 @@ class Game(cmd.Cmd):
                 self.alive = False
                 display.multiline_alert_box([
                     f"You use your {display.bold(selected_item.name)}, but the {display.underline(selected_character.name)} doesn't even budge!",
-                    "", # empty line
+                    "",  # empty line
                     "He strikes you with one fell swoop of his katana...",
-                    "", # 2 empty lines
+                    "",  # 2 empty lines
                     "",
-                    display.bold(display.underline(display.colour(1, "GAME OVER!!!")))
+                    display.bold(display.underline(
+                        display.colour(1, "GAME OVER!!!")))
                 ])
                 return True
 
-        # Regular battles
+        # Ninja battles
+        if isinstance(selected_character, Ninja):
+            selected_character.fight(selected_item) # execute fight right away
+            return
 
+        # Regular battles
         if selected_item.get_damage() == 0:
             print(
                 f"You try to use your {display.bold(selected_item.name)} but to no avail! It is not very effective.")
             return
 
-        won_fight = selected_character.fight(selected_item)
-
+        # Battle sequence
+        starting_health = selected_character.get_total_health()
+        display.clear()
+        display.print_healthbar(selected_character.name,
+                                selected_character.get_health(), starting_health)
+        print("")  # empty line
+        won_fight = selected_character.fight(selected_item) # execute fight
+        print(f"You use your {display.bold(selected_item.name)} to fight the {display.underline(selected_character.name)}, dealing {display.colour(1, min(selected_item.damage, starting_health))} damage!")
+        print("> Press Enter to Continue <")
+        input() # wait for enter
+        display.clear()
+        display.print_healthbar(selected_character.name, selected_character.get_health(), starting_health)
+        print("") # blank line
         if won_fight:
-            # give player $20
-            self.purse += 20
+            # give player currency proportional to enemy health
+            given = round(math.sqrt(20 * starting_health)) # function increases at a decreasing rate
+            self.purse += given
+            print(f"Bravo! You have defeated this {display.underline(selected_character.name)}! For this you have received {display.colour(220, f'${given}')}.")
+            # remove character from cave
+            self.current_cave.remove_character(selected_character)
             # check for dropped items
             items_to_give = selected_character.get_drop()
-            if items_to_give is not None:
-                self.items.append(items_to_give)
-        else:  # they have not defeated the enemy, but as it is not a boss they do not lose the game
+            print("") # blank line
+            print("> Press Enter to Continue <")
+            input()
+        else:
             print(
                 f"You fight valiantly with your {display.bold(selected_item.name)}, but the {display.underline(selected_character.name)} is not defeated!")
+            print("") # empty line
+            print("> Press Enter to Continue <")
+            input()
+        
+        self.__set_dirty()
 
         # FEAT: Fight sequence
 
@@ -233,15 +260,17 @@ class Game(cmd.Cmd):
         print(f"╰╴ [{len(characters) + 1}]: Cancel conversation")
 
         talk_with_int = display.prompt("Please select a character", 1, "int",
-                                        lambda num: "That isn't a valid option" if num > len(characters) + 1 or num <= 0 else True)
+                                       lambda num: "That isn't a valid option" if num > len(characters) + 1 or num <= 0 else True)
 
         selected_character = characters[talk_with_int - 1]
 
         if selected_character.conversation is None:
-            print(f"This {selected_character.name} doesn't want to talk to you.")
+            print(
+                f"This {selected_character.name} doesn't want to talk to you.")
             return
 
-        display.speech_box(selected_character.conversation, selected_character.name, colour_code=8)
+        display.speech_box(selected_character.conversation,
+                           selected_character.name, colour_code=8)
         self.__set_dirty()
 
     def do_shop(self, arg):
@@ -300,13 +329,13 @@ class Game(cmd.Cmd):
               display.colour(220, f'${self.purse}')}.")
 
     def do_inv(self, arg):
-        """Check what items you currently have"""
+        """Check what items you currently have and show how much money you've got"""
         if not len(self.items):
-            print("You don't have any items right now!")
+            print(f"You don't have any items right now, and {display.colour(220, f'${self.purse}')}")
             display.print_hint("Items can be found or bought in a 🛍️  shop")
             return
 
-        print(f"You have {display.bold(len(self.items))} item(s).")
+        print(f"You have {display.bold(len(self.items))} item(s) and {display.colour(220, f'${self.purse}')}")
         for (i, item) in enumerate(self.items):
             if i == len(self.items) - 1:  # last item has a different special character
                 print(f"╰╴ {item.emoji} {item.name}")

@@ -45,6 +45,7 @@ class Enemy(Character):
         super().__init__(name, description, cave)  # initialise superclass
 
         self.health = health
+        self.total_health = health
 
         # Optional attributes
         self.weakness_item_name = None # defeats the enemy right away
@@ -66,17 +67,26 @@ class Enemy(Character):
         """Get the item this enemy drops"""
         return self.drop
 
+    def get_health(self):
+        """Get the health of this enemy"""
+        return self.health
+
+    def get_total_health(self):
+        """Get the initial total health of this enemy"""
+        return self.total_health
+
     def fight(self, item):
         """Fight sequence for this enemy"""
+        if item.damage >= self.health:
+            # enemy defeated!
+            self.health = 0
+            return True
+        self.health -= item.damage # apply damage to enemy
         if item.name == self.weakness_item_name:
             # enemy defeated!
             return True
-        if item.damage >= self.health:
-            # enemy defeated!
-            return True
         else:
-            # damage enemy but not defeated
-            self.health -= item.damage
+            # damaged enemy but not defeated
             return False
         
 

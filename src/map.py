@@ -77,7 +77,7 @@ class MapGraph:
 
         shop = Shop(
             2, "A nice and cozy room with a counter and some products", new_map)
-        shop.add_shop_item(Item("Axe", "🪓", "A sharpened hatchet", 15, 50))
+        shop.add_shop_item(Item("Axe", "🪓", "A sharpened hatchet", 15, 15))
         shop.add_shop_item(
             Item("Longsword", "🗡️ ", "A sharp but rusty blade", 20, 20))
         shop.add_shop_item(Item(
@@ -91,8 +91,12 @@ class MapGraph:
 
         new_map.__add_cave(shop, [1])
 
-        new_map.__add_cave(Cave(
-            3, "Bottomless Pit", "Deep, dark, bottomless, hole with a small ledge around the edge. Take care with your footing!", new_map), [1])
+        cave3 = Cave(
+            3, "Bottomless Pit", "Deep, dark, bottomless, hole with a small ledge around the edge. Take care with your footing!", new_map)
+        new_map.__add_cave(cave3, [1])
+        skeleton = Enemy("Reanimated Skeleton", "A spooky scary skeleton... AAH IT MOVES!", 30, cave3)
+        skeleton.set_conversation("*teeth chattering loudly*")
+        cave3.add_character(skeleton)
 
         cave4 = Cave(
             4, "Dungeon", "Echoes of unseen horrors lurk beyond the flickering torchlight", new_map)
@@ -109,7 +113,7 @@ class MapGraph:
         cave5.add_character(bat)
 
         cave6 = Cave(
-            6, "Lava Tube", "A long, cold tunnel", new_map)
+            6, "Lava Tube", "A long, cold tunnel lined with ancient lava flows", new_map)
         new_map.__add_cave(cave6, [3, 2])
         slime = Friendly(
             "Red Slime", "A small red blob that's just ✨ vibing ✨", cave6)
@@ -161,6 +165,7 @@ class MapGraph:
         goblin = Enemy(
             "Goblin", "A little green stinky beast with an eye for your gold", 5, cave12)
         goblin.set_conversation("Got any gold?")
+        dagger = Item("Dagger", "🔪", "A stubby dagger", 50, 15)
         cave12.add_character(goblin)
 
         return new_map

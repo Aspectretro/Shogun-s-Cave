@@ -169,7 +169,6 @@ def multiline_alert_box(msgs: list[str], colour_code=1):  # colour_code is 1
     clear()
 
 
-
 def speech_box(msg: str, speaker: str, colour_code=1):  # colour_code 1 is red
     """An alert box attributed to a speaker"""
     clear()
@@ -187,8 +186,18 @@ def speech_box(msg: str, speaker: str, colour_code=1):  # colour_code 1 is red
     input()  # wait for enter key
     clear()
 
+
 def visual_len(test: str) -> int:
     """Get the visual (column) length of a string by excluding ANSI control characters"""
     # Finding ANSI control characters
-    regex = re.compile("[\\u001B\\u009B][[\\]()#;?]*(?:(?:(?:(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]+)*|[a-zA-Z\\d]+(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?(?:\\u0007|\\u001B\\u005C|\\u009C))|(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TZcf-nq-uy=><~]))")
+    regex = re.compile(
+        "[\\u001B\\u009B][[\\]()#;?]*(?:(?:(?:(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]+)*|[a-zA-Z\\d]+(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?(?:\\u0007|\\u001B\\u005C|\\u009C))|(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TZcf-nq-uy=><~]))")
     return len(regex.sub("", test))
+
+
+def print_healthbar(name: str, health: int, max_health: int):
+    """Print a coloured healthbar"""
+    health_percent = health / max_health
+
+    print(f"{underline(name)}:", colour(
+        5, f"{health}/{max_health}HP [{'#' * round(health_percent * 15)}{'_' * round((1 - health_percent) * 15)}]"))
