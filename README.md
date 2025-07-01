@@ -4,7 +4,7 @@ This game is made based on the game *Hunt The Wumpus* made by Gregory Yob in 197
 
 Similar to the original game and through its inspiration, although this replica does not have as much cave compared to the original game, there are personal addons within this replicated game to achieve differentiation compared to the original verison and hence implement some originality and ideas that the group have came up with. The new implementations such as the *shop* system also brings an extra sense of modernisation to match with modern RPG games.
 
-This replica have also implemented a hidden ending towards the end of the game, which makes the game a lot more interesting for the player to play, and further deepens the true meaning of adventure. This idea came from the game *Adventure*, made by Warren Robinet, made in 1980, where an easter egg - the name of the creator is featured towards the end of the game.
+This replica have also implemented a hidden ending towards the end of the game. This idea came from the game *Adventure*, made by Warren Robinet, made in 1980, where the first easter egg in history of video games - the name of the creator is featured towards the end of the game. This feature makes the game a lot more interesting for the player to play as curiosity will drive the player to explore the game more, hence further deepens the true meaning of ***"adventure"***.
 
 ## Lore of The Game
 Welcome to Shogunate's Caverns!
