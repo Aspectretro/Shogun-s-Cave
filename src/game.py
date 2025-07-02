@@ -200,7 +200,7 @@ class Game(cmd.Cmd):
         # Boss battle
         if isinstance(selected_character, Boss):
             # handle boss battle
-            won_battle = selected_character.fight(selected_item)
+            won_battle = selected_character.fight(selected_item) # FIXME: Way of determining actually winning the fight.
             if not won_battle:
                 self.alive = False
                 display.multiline_alert_box([
