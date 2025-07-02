@@ -34,20 +34,26 @@ class Game(cmd.Cmd):
 
     def tutorial(self):  # TODO: impl this into the game
         display.clear()
-        print("") # empty line
+        print("")  # empty line
         print(
             f"Welcome to the {display.bold('Shogunate\'s Caverns!')} This is the tutorial and will show you how the game works.")
-        print("") # empty line
-        print(f"In this text-based game, you will be dropped into unknown caverns — survive, defeat the {display.colour(1, 'boss')} and find a way out!")
-        print(f"Throughout your adventure inside this deep, dark world, you will encounter various {display.underline('characters')}, both friend and foe.")
-        print(f"You can gain valuable {display.colour(220, 'money')} by defeating enemies with weapons bought from the 🛍️  shops!")
-        print("") # empty line
+        print("")  # empty line
+        print(
+            f"In this text-based game, you will be dropped into unknown caverns — survive, defeat the {display.colour(1, 'boss')} and find a way out!")
+        print(
+            f"Throughout your adventure inside this deep, dark world, you will encounter various {display.underline('characters')}, both friend and foe.")
+        print(
+            f"You can gain valuable {display.colour(220, 'money')} by defeating enemies with weapons bought from the 🛍️  shops!")
+        print(
+            f"You will start with {display.colour(220, '$20')}. Spend your money wisely, as not all items are of equal usefulness.")
+        print("")  # empty line
         print("Press Enter to continue, or type q and then Enter to skip the rest of the tutorial")
         skip = input("> ")
         if skip == "q":
-            return # skip tutorial
+            return  # skip tutorial
         display.clear()
-        print(f"In these caverns, each cave is given a [{display.bold('number')}] and a name... Use these numbers to refer to the caves you want to move to!")
+        print(
+            f"In these caverns, each cave is given a [{display.bold('number')}] and a name... Use these numbers to refer to the caves you want to move to!")
         print(f"BEWARE! Not all caves are accessible from the start. Explore these caverns... but don't get lost!")
         print("---")
         print("To interact with your environment you can issue commands to the game")
@@ -61,7 +67,8 @@ class Game(cmd.Cmd):
         print("  quit:    Quit and close the game")
         print("  help:    Bring up a list of commands")
         print("To issue a command, type the command's name and press Enter")
-        display.print_hint("Sometimes, you'll get a hint like this. Pay close attention!")
+        display.print_hint(
+            "Sometimes, you'll get a hint like this. Pay close attention!")
         print("---")
         print("")
         print("The arrow below indicates the game is listening for some input. Press Enter to continue")
@@ -86,6 +93,29 @@ class Game(cmd.Cmd):
 
         if cave_num == self.current_cave.num:
             return  # don't change caves if they are in the same cave already
+
+        # EASTER EGG
+        if cave_num == 10 and any(map(lambda item: item.name == "Obsidian Key", self.items)):
+            display.multiline_alert_box([
+                "A loud rumbling sound fills the cave as the rocks in the ceiling open up...",
+                "",
+                "A shining scroll of text appears as sunlight floods the once-dark tunnels."
+            ], colour_code=5)
+            display.multiline_alert_box([
+                "You've unlocked the secret ending... bravo!",
+                "",
+                "",
+                "THANKS FOR PLAYING Shogunate's Caverns",
+                "A game by Jim, Max & Gavin"
+            ], colour_code=4)
+            display.multiline_alert_box([
+                "-*- Credits -*-",
+                "Lead Developer: Jim",
+                "Assistant Developer: Max",
+                "Documentation Expert: Gavin",
+                "Diagram Wranglers: Gavin and Max"
+            ], colour_code=6)
+            return True
 
         self.current_cave = self.map.get_cave(cave_num)
         self.__set_dirty()
@@ -200,7 +230,8 @@ class Game(cmd.Cmd):
         # Boss battle
         if isinstance(selected_character, Boss):
             # handle boss battle
-            won_battle = selected_character.fight(selected_item) # FIXME: Way of determining actually winning the fight.
+            # FIXME: Way of determining actually winning the fight.
+            won_battle = selected_character.fight(selected_item)
             if not won_battle:
                 self.alive = False
                 display.multiline_alert_box([
@@ -212,11 +243,38 @@ class Game(cmd.Cmd):
                     display.bold(display.underline(
                         display.colour(1, "GAME OVER!!!")))
                 ])
-                return True
+                return True  # stop loop
+            else:
+                # won!
+                display.multiline_alert_box([
+                    # Only weapon is crossbow
+                    f"You aim your {display.bold('Crossbow')} at the mighty {display.underline(selected_character.name)}...",
+                    "",
+                    "He lunges at you, shiny katana ready to strike!"],
+                    colour_code=1)
+                display.multiline_alert_box([
+                    f"Suddenly, a mighty thud echoes around the cavern, as the {display.underline(selected_character.name)} falls to the ground",
+                    ""
+                ], colour_code=2)
+                print("")
+                print(
+                    "CONGRATULATIONS for defeating the final boss and escaping the Shogunate's Caverns!")
+                print("")
+                print("Press Enter to quit")
+                print(
+                    "    or press c and Enter to continue exploring the caves (quit anytime with the quit command)")
+                choice = input("> ")
+                if choice == "c":
+                    # Give item
+                    self.items.append(selected_character.get_drop())
+                    self.__set_dirty()
+                    return  # Continue the caves
+                else:
+                    return True
 
         # Ninja battles
         if isinstance(selected_character, Ninja):
-            selected_character.fight(selected_item) # execute fight right away
+            selected_character.fight(selected_item)  # execute fight right away
             return
 
         # Regular battles
@@ -231,32 +289,35 @@ class Game(cmd.Cmd):
         display.print_healthbar(selected_character.name,
                                 selected_character.get_health(), starting_health)
         print("")  # empty line
-        won_fight = selected_character.fight(selected_item) # execute fight
+        won_fight = selected_character.fight(selected_item)  # execute fight
         print(f"You use your {display.bold(selected_item.name)} to fight the {display.underline(selected_character.name)}, dealing {display.colour(1, min(selected_item.damage, starting_health))} damage!")
         print("> Press Enter to Continue <")
-        input() # wait for enter
+        input()  # wait for enter
         display.clear()
-        display.print_healthbar(selected_character.name, selected_character.get_health(), starting_health)
-        print("") # blank line
+        display.print_healthbar(selected_character.name,
+                                selected_character.get_health(), starting_health)
+        print("")  # blank line
         if won_fight:
             # give player currency proportional to enemy health
-            given = round(math.sqrt(20 * starting_health)) # function increases at a decreasing rate
+            # function increases at a decreasing rate
+            given = round(math.sqrt(20 * starting_health))
             self.purse += given
-            print(f"Bravo! You have defeated this {display.underline(selected_character.name)}! For this you have received {display.colour(220, f'${given}')}.")
+            print(
+                f"Bravo! You have defeated this {display.underline(selected_character.name)}! For this you have received {display.colour(220, f'${given}')}.")
             # remove character from cave
             self.current_cave.remove_character(selected_character)
             # check for dropped items
             items_to_give = selected_character.get_drop()
-            print("") # blank line
+            print("")  # blank line
             print("> Press Enter to Continue <")
             input()
         else:
             print(
                 f"You fight valiantly with your {display.bold(selected_item.name)}, but the {display.underline(selected_character.name)} is not defeated!")
-            print("") # empty line
+            print("")  # empty line
             print("> Press Enter to Continue <")
             input()
-        
+
         self.__set_dirty()
 
         # FEAT: Fight sequence
@@ -276,6 +337,7 @@ class Game(cmd.Cmd):
             if isinstance(character, Boss):
                 name = display.colour(1, name)
             print(f"├╴ [{i + 1}]: {name}")
+            print(f"│    └╌╌ {character.description}")
         print(f"╰╴ [{len(characters) + 1}]: Cancel conversation")
 
         talk_with_int = display.prompt("Please select a character", 1, "int",
@@ -320,6 +382,7 @@ class Game(cmd.Cmd):
             else:  # else make it green
                 cost_display = display.colour(34, cost_display)
             print(f"├╴ [{i + 1}] {item.emoji} {item.name} ({cost_display})")
+            print(f"│    └╌╌ {item.description}")
         print(
             f"╰╴ [{len(self.current_cave.for_sale) + 1}] Leave without buying anything")
 
@@ -350,11 +413,13 @@ class Game(cmd.Cmd):
     def do_inv(self, arg):
         """Check what items you currently have and show how much money you've got"""
         if not len(self.items):
-            print(f"You don't have any items right now, and {display.colour(220, f'${self.purse}')}")
+            print(
+                f"You don't have any items right now, and {display.colour(220, f'${self.purse}')}")
             display.print_hint("Items can be found or bought in a 🛍️  shop")
             return
 
-        print(f"You have {display.bold(len(self.items))} item(s) and {display.colour(220, f'${self.purse}')}")
+        print(
+            f"You have {display.bold(len(self.items))} item(s) and {display.colour(220, f'${self.purse}')}")
         for (i, item) in enumerate(self.items):
             if i == len(self.items) - 1:  # last item has a different special character
                 print(f"╰╴ {item.emoji} {item.name}")

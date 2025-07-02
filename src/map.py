@@ -102,6 +102,8 @@ class MapGraph:
             4, "Dungeon", "Echoes of unseen horrors lurk beyond the flickering torchlight", new_map)
         ninja = Ninja(cave4)
         cave4.add_character(ninja)
+        villager = Friendly("Lost Villager", "A disheveled villager with a cast on their right arm", cave4)
+        villager.set_conversation("You need to help me to get out of this maze! The Shogun won't let us leave!")
         new_map.__add_cave(cave4, [1])
 
         cave5 = Cave(
@@ -134,7 +136,7 @@ class MapGraph:
             8, "A small room lit by flickering candlelights. A counter and some products are for sale.", new_map)
         shop2.add_shop_item(
             # weakness of the boss
-            Item("Crossbow", "🏹", "Tension-powered launcher", 45, 30))
+            Item("Crossbow", "🏹", "A powerful bow with ancient writing inscribed on it", 45, 30))
         shop2.add_shop_item(
             Item("Cricket Bat", "🏏", "Swing for your life", 40, 15)
         )
@@ -146,7 +148,10 @@ class MapGraph:
             9, "Shallow Pit", "A shallow pit. Careful where you step!", new_map), [2, 4])
 
         cave10 = Cave(
-            10, "Cave", "A small cave underground. A glimpse of light and some gentle gusts of air seep through the gaps between the rocks", new_map)
+            10, "Whispering Hollow", "A glimpse of light and some gentle gusts of air seep through the gaps between the rocks. There is an eerie feeling here.", new_map)
+        mage = Enemy("Dark Mage", "A tall figure in an obsidian-coloured trench coat", 50, cave10)
+        mage.set_conversation("Bring me my matching key and I promise great rewards...")
+        cave10.add_character(mage)
         new_map.__add_cave(cave10, [8, 9])
 
         cave11 = Cave(

@@ -99,18 +99,13 @@ class Boss(Enemy):
     def __init__(self, name, description, cave):
         super().__init__(name, description, 1_000_000, cave)
     
-    def set_weakness(self, weakness):
-        return super().set_weakness(weakness)
-    
-    def get_weakness(self):
-        return super().get_weakness()
-    
     def fight(self, item):
         # Boss fight sequence
         display.speech_box("You dare challenge me, little fool?", self.name)
         # You can only defeat a boss with its weakness
         if item.name != self.weakness_item_name:
             return False
+        return True
 
 class Ninja(Enemy):
     """A special type of enemy that can kidnap the player and transport them to a random cave"""
