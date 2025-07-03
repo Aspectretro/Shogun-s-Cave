@@ -150,7 +150,7 @@ class MapGraph:
         cave10 = Cave(
             10, "Whispering Hollow", "A glimpse of light and some gentle gusts of air seep through the gaps between the rocks. There is an eerie feeling here.", new_map)
         mage = Enemy("Dark Mage", "A tall figure in an obsidian-coloured trench coat", 50, cave10)
-        mage.set_conversation("Bring me my matching key and I promise great rewards...")
+        mage.set_conversation("Have you seen the key somewhere? It is quite important...")
         cave10.add_character(mage)
         new_map.__add_cave(cave10, [8, 9])
 

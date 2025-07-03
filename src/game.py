@@ -29,7 +29,7 @@ class Game(cmd.Cmd):
         # initially the player begins in the starting cave
         self.current_cave = self.map.get_cave(1)
 
-        self.purse = 20  # the player's coins
+        self.purse = 100  # the player's coins
         self.items = []
 
     def tutorial(self):  # TODO: impl this into the game
@@ -97,16 +97,16 @@ class Game(cmd.Cmd):
         # EASTER EGG
         if cave_num == 10 and any(map(lambda item: item.name == "Obsidian Key", self.items)):
             display.multiline_alert_box([
-                "A loud rumbling sound fills the cave as the rocks in the ceiling open up...",
+                "A loud rumbling sound fills the cave as an anient hallway breaks apart...",
                 "",
-                "A shining scroll of text appears as sunlight floods the once-dark tunnels."
+                "A shining scroll of text appears as torhes on the walls got lit up one after the other"
             ], colour_code=5)
             display.multiline_alert_box([
-                "You've unlocked the secret ending... bravo!",
-                "",
-                "",
-                "THANKS FOR PLAYING Shogunate's Caverns",
-                "A game by Jim, Max & Gavin"
+                "You've unlocked a pathway to the hall of memorials",
+                "There stood three statues:",
+                "Jim, Max, and Gavin",
+                ""
+                "A golden door creeked open"
             ], colour_code=4)
             display.multiline_alert_box([
                 "-*- Credits -*-",
@@ -115,7 +115,7 @@ class Game(cmd.Cmd):
                 "Documentation Expert: Gavin",
                 "Diagram Wranglers: Gavin and Max"
             ], colour_code=6)
-            return True
+            self.alive = False
 
         self.current_cave = self.map.get_cave(cave_num)
         self.__set_dirty()
