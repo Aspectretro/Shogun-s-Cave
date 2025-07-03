@@ -177,7 +177,7 @@ class MapGraph:
 
     def random_cave(self):
         """Return a random cave"""
-        return random.choice(self.cave_data)
+        return random.choice(self.cave_data[1:])
 
     def get_cave(self, num):
         """Get a cave by number"""
