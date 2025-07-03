@@ -29,7 +29,7 @@ class Game(cmd.Cmd):
         # initially the player begins in the starting cave
         self.current_cave = self.map.get_cave(1)
 
-        self.purse = 50  # the player's coins
+        self.purse = 20  # the player's coins
         self.items = []
 
     def tutorial(self):  # TODO: impl this into the game
