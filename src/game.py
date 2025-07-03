@@ -343,6 +343,11 @@ class Game(cmd.Cmd):
         talk_with_int = display.prompt("Please select a character", 1, "int",
                                        lambda num: "That isn't a valid option" if num > len(characters) + 1 or num <= 0 else True)
 
+        if talk_with_int == (len(characters) + 1):
+            # cancel talk
+            print("")
+            return
+
         selected_character = characters[talk_with_int - 1]
 
         if selected_character.conversation is None:
