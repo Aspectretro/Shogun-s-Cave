@@ -19,6 +19,6 @@ Stay alive, don't die!
 This game is available to be operated on both Linux and Windows platform. Please check system type/validation before running the game or else it might crash. In addition, please ensure that all the files are stored under one directory to ensure a safe and smooth gameplay without any disruptions.
 
 # Contributors
-Main coder: azyritedev (azyrite)
-Secondary coder: Aspectretro
-Game planner: Aspectretro, azyritedev, g-e-yhatespy
+- Main coder: azyritedev (azyrite)
+- Secondary coder: Aspectretro
+- Game planner: Aspectretro, azyritedev, g-e-yhatespy
