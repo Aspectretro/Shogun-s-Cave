@@ -11,7 +11,6 @@ import sys
 import math
 
 
-# TODO: custom help cmd
 class Game(cmd.Cmd):
     prompt = "> "
     ruler = "-"
@@ -32,7 +31,7 @@ class Game(cmd.Cmd):
         self.purse = 20  # the player's coins
         self.items = []
 
-    def tutorial(self):  # TODO: impl this into the game
+    def tutorial(self):
         display.clear()
         print("")  # empty line
         print(
@@ -115,7 +114,7 @@ class Game(cmd.Cmd):
                 "Documentation Expert: Gavin",
                 "Diagram Wranglers: Gavin and Max"
             ], colour_code=6)
-            return True # FIXME: End of the game
+            return True
 
         self.current_cave = self.map.get_cave(cave_num)
         self.__set_dirty()
@@ -230,7 +229,6 @@ class Game(cmd.Cmd):
         # Boss battle
         if isinstance(selected_character, Boss):
             # handle boss battle
-            # FIXME: Way of determining actually winning the fight.
             won_battle = selected_character.fight(selected_item)
             if not won_battle:
                 self.alive = False
